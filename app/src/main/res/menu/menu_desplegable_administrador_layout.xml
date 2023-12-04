@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/ver_usuarios"
+        android:title="Ver Usuarios"
+        app:showAsAction="never"
+        />
+
+    <item
+        android:id="@+id/agregar_divisa"
+        android:title="Agregar divisa"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/agregar_pedido"
+        android:title="Agregar pedido"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/cambiar_contrasenha"
+        android:title="Cambiar contraseña"
+        app:showAsAction="never"
+        />
+</menu>

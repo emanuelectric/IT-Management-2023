@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="43dp"
+        android:layout_height="35dp"
+        app:srcCompat="@drawable/arrows"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"
+        android:clickable="true"
+        android:onClick="LanzarVistaMenuPrincipal" />
+
+    <TextView
+        android:id="@+id/textView_Divisa"
+        android:layout_width="162dp"
+        android:layout_height="35dp"
+        android:text="Divisa"
+        android:textSize="25dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="30dp"
+        />
+
+    <ImageView
+        android:id="@+id/imageView15"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="190dp"
+        app:srcCompat="@drawable/bloque_texto" />
+
+    <ImageView
+        android:id="@+id/imageView16"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="270dp"
+        app:srcCompat="@drawable/bloque_texto" />
+
+    <EditText
+        android:id="@+id/edittext_nombreDivisa"
+        android:layout_width="302dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="55dp"
+        android:layout_marginTop="205dp"
+        android:ems="10"
+        android:hint="Nombre (Ej: Guaraní paraguayo)"
+        android:textColor="@color/dark_grey"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/edittext_simboloDivisa"
+        android:layout_width="299dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="55dp"
+        android:layout_marginTop="285dp"
+        android:ems="10"
+        android:inputType="text"
+        android:textColor="@color/dark_grey"
+        android:hint="Símbolo (Ej: PYG)" />
+
+    <Button
+        android:id="@+id/boton_guardarDivisa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/imageView16"
+        android:layout_marginTop="20dp"
+        android:onClick="guardarDivisa"
+        android:textColor="#FFFFFF"
+        android:text="Guardar"
+        android:textSize="16sp"
+        android:background="@drawable/boton_redondeado_rojo"
+        android:padding="12dp" />
+
+
+</RelativeLayout>

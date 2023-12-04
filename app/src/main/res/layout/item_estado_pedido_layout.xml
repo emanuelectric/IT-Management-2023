@@ -1,0 +1,25 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- cómo se verá un elemento de la lista -->
+    <Button
+        android:id="@+id/textview_EstadoPedidoItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="IDPedido"
+        app:cornerRadius="30dp"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:layout_gravity="center"
+        />
+
+    <!-- Otros elementos -->
+
+</LinearLayout>
