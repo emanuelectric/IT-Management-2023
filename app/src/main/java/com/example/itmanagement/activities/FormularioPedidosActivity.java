@@ -13,7 +13,7 @@ public class FormularioPedidosActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.formulario_estados_layout);
+        setContentView(R.layout.formulario_pedidos_layout);
     }
 
     // Método para ir a la pantalla principal

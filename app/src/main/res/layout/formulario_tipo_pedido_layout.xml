@@ -14,17 +14,16 @@
         android:layout_marginTop="30dp"
         android:layout_marginLeft="10dp"
         android:clickable="true"
-        android:onClick="irListaDivisas" />
+        android:onClick="LanzarVistaMenuPrincipal" />
 
     <TextView
-        android:id="@+id/textView_Divisa"
-        android:layout_width="162dp"
-        android:layout_height="35dp"
-        android:text="Agregar divisa"
-        android:textSize="25dp"
+        android:id="@+id/textView_agregarTipoPedido"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="60dp"
         android:layout_marginTop="30dp"
-        />
+        android:text="Agregar Tipo de Pedido"
+        android:textSize="25dp" />
 
     <ImageView
         android:id="@+id/imageView15"
@@ -41,18 +40,18 @@
         app:srcCompat="@drawable/bloque_texto" />
 
     <EditText
-        android:id="@+id/edittext_nombreDivisa"
+        android:id="@+id/edittext_nombreTipoPedido"
         android:layout_width="302dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="55dp"
         android:layout_marginTop="205dp"
         android:ems="10"
-        android:hint="Nombre (Ej: Guaraní paraguayo)"
+        android:hint="Nombre del tipo de pedido"
         android:textColor="@color/dark_grey"
         android:inputType="textEmailAddress" />
 
     <EditText
-        android:id="@+id/edittext_simboloDivisa"
+        android:id="@+id/edittext_descripcionTipoPedido"
         android:layout_width="299dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="55dp"
@@ -60,21 +59,20 @@
         android:ems="10"
         android:inputType="text"
         android:textColor="@color/dark_grey"
-        android:hint="Símbolo (Ej: PYG)" />
+        android:hint="Descripción del tipo de pedido" />
 
     <Button
-        android:id="@+id/boton_guardarDivisa"
+        android:id="@+id/boton_guardarTipoPedido"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/imageView16"
         android:layout_marginTop="20dp"
-        android:onClick="guardarDivisa"
+        android:onClick="guardarTipoPedido"
         android:textColor="#FFFFFF"
         android:text="Guardar"
         android:textSize="16sp"
         android:background="@drawable/boton_redondeado_rojo"
         android:padding="12dp" />
-
 
 </RelativeLayout>

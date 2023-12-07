@@ -14,7 +14,7 @@
         android:layout_marginTop="30dp"
         android:layout_marginLeft="10dp"
         android:clickable="true"
-        android:onClick="LanzarVistaIniciarSesion" />
+        android:onClick="LanzarVistaMenuPrincipal" />
 
     <TextView
         android:id="@+id/textView"
@@ -22,7 +22,7 @@
         android:layout_height="60dp"
         android:layout_marginLeft="60dp"
         android:layout_marginTop="30dp"
-        android:text="Restablecer contraseña"
+        android:text="Cambiar contraseña"
         android:textSize="25dp" />
 
     <ImageView
@@ -61,7 +61,7 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/imageView16"
         android:layout_marginTop="20dp"
-        android:onClick="siguienteRestablecerContrasenha"
+        android:onClick="siguienteRestablecerContrasena"
         android:textColor="#FFFFFF"
         android:text="Siguiente"
         android:textSize="16sp"

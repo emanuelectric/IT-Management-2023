@@ -1,8 +1,5 @@
 package com.example.itmanagement.activities;
 
-// Importar la clase MD5Util
-import com.example.itmanagement.util.MD5Util;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.itmanagement.R;
 import com.example.itmanagement.data.DBHelper;
 
-// RestablecerContrasena01Activity es responsable de manejar la lógica para restablecer la contraseña
 public class RestablecerContrasenha01Activity extends AppCompatActivity {
 
     private DBHelper dbHelper;
@@ -23,12 +19,9 @@ public class RestablecerContrasenha01Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.formulario_cambiar_contrasenha_01_layout);
+        setContentView(R.layout.formulario_restablecer_contrasenha_01_layout);
 
-        // Inicializar la instancia de DBHelper
         dbHelper = new DBHelper(this);
-
-        // Obtener la referencia al EditText en el layout
         editTextRecuperarContrasenaCorreoElectronico = findViewById(R.id.edittext_recuperarContrasenha_correoElectronico);
     }
 
@@ -36,32 +29,62 @@ public class RestablecerContrasenha01Activity extends AppCompatActivity {
         String correo = editTextRecuperarContrasenaCorreoElectronico.getText().toString();
 
         if (!correo.isEmpty()) {
-            // Utilizar la instancia de DBHelper para verificar el correo en la base de datos
             if (dbHelper.comprobarCorreo(correo)) {
-                // El correo está en la base de datos, iniciar la siguiente actividad
                 Intent intent = new Intent(this, RestablecerContrasenha02Activity.class);
                 intent.putExtra("correo", correo);
 
-                // Verificar si hay actividades que pueden manejar la intención
                 if (intent.resolveActivity(getPackageManager()) != null) {
                     startActivity(intent);
                 } else {
-                    // Manejar el caso en el que no hay actividades que puedan manejar la intención
                     Toast.makeText(this, "No hay actividad para manejar la intención", Toast.LENGTH_SHORT).show();
                 }
             } else {
-                // El correo no está en la base de datos, mostrar Toast
                 Toast.makeText(this, "Correo no encontrado", Toast.LENGTH_SHORT).show();
             }
         } else {
-            // Mostrar Toast indicando que el campo de correo está vacío
             Toast.makeText(this, "Por favor, ingresa tu correo electrónico", Toast.LENGTH_SHORT).show();
         }
     }
 
-    // Método para ir a la pantalla inicial
-    public void LanzarVistaMenuInicialRC(View view) {
-        Intent intent = new Intent(this, IniciarSesionActivity.class);
+    @Override
+    public void onBackPressed() {
+        // Obtén el tipo de usuario del correo electrónico ingresado
+        super.onBackPressed();
+        String email = editTextRecuperarContrasenaCorreoElectronico.getText().toString();
+
+        // Verifica si el campo de correo electrónico no está vacío
+        if (!email.isEmpty()) {
+            int tipoUsuario = dbHelper.obtenerTipoUsuarioPorCorreo(email);
+
+            // Abre la actividad correspondiente basándose en el tipo de usuario
+            abrirActividadSegunTipoUsuario(tipoUsuario);
+        } else {
+            // En caso de correo electrónico vacío, regresa a la pantalla de inicio de sesión sin argumentos
+            abrirActividadSegunTipoUsuario(0);  // Proporciona un valor predeterminado o adecuado según tu lógica
+        }
+    }
+
+    // Método para abrir la actividad según el tipo de usuario
+    private void abrirActividadSegunTipoUsuario(int tipoUsuario) {
+        Intent intent;
+
+        switch (tipoUsuario) {
+            case 1:
+                intent = new Intent(this, MenuPrincipalSuperadministradorActivity.class);
+                break;
+            case 3:
+                intent = new Intent(this, MenuPrincipalAdministradorActivity.class);
+                break;
+            case 4:
+                intent = new Intent(this, MenuPrincipalClienteActivity.class);
+                break;
+            default:
+                intent = new Intent(this, MenuPrincipalClienteActivity.class);
+                break;
+        }
+
+        // Inicia la nueva actividad y finaliza la actual si no se desea volver atrás
         startActivity(intent);
+        finish();
     }
 }

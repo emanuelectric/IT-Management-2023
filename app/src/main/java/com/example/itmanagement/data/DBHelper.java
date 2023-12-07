@@ -11,7 +11,11 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.example.itmanagement.modelo.CategoriaProducto;
 import com.example.itmanagement.modelo.Divisa;
+import com.example.itmanagement.modelo.EstadoPedido;
+import com.example.itmanagement.modelo.Producto;
+import com.example.itmanagement.modelo.TipoPedido;
 import com.example.itmanagement.modelo.TipoUsuario;
 import com.example.itmanagement.modelo.Usuario;
 
@@ -30,7 +34,7 @@ public class DBHelper extends SQLiteOpenHelper {
         public final Context context;
         public static final String TAG = "MiDBHelper";
         public static final String DB_NAME = "itmanagementdb.sqlite";
-        public static final int DB_VERSION = 2;
+        public static final int DB_VERSION = 4;
 
         private static long usuarioLogueado;
 
@@ -117,7 +121,6 @@ public class DBHelper extends SQLiteOpenHelper {
             public static final String COLUMN_DESCRIPCION_PRODUCTO = "descripcion_producto";
             public static final String COLUMN_PRECIO_PRODUCTO = "precio_producto";
             public static final String COLUMN_ID_CATEGORIA_PRODUCTO_PRODUCTO = "id_categoria_producto";
-            public static final String COLUMN_ID_DIVISA_PRODUCTO = "id_divisa";
             public static final String COLUMN_AUDIT_FECHA_INSERT_PRODUCTO = "audit_fecha_insert_";
             public static final String COLUMN_AUDIT_USUARIO_MODIF_PRODUCTO = "audit_usuario_modif_";
             public static final String COLUMN_AUDIT_FECHA_MODIF_PRODUCTO = "audit_fecha_modif_";
@@ -282,13 +285,11 @@ public class DBHelper extends SQLiteOpenHelper {
                     "descripcion_producto VARCHAR NOT NULL," +
                     "precio_producto NUMERIC(2) NOT NULL," +
                     "id_categoria_producto VARCHAR NOT NULL," +
-                    "id_divisa INTEGER NOT NULL," +
                     "audit_fecha_insert_ VARCHAR," +
                     "audit_usuario_modif_ VARCHAR," +
                     "audit_fecha_modif_ VARCHAR," +
                     "imagen_producto VARCHAR," +
-                    "FOREIGN KEY (id_categoria_producto) REFERENCES Categoria_Producto (id_categoria_producto)," +
-                    "FOREIGN KEY (id_divisa) REFERENCES Divisa (id_divisa)" +
+                    "FOREIGN KEY (id_categoria_producto) REFERENCES Categoria_Producto (id_categoria_producto)" +
                     ")"
             );
 
@@ -504,32 +505,51 @@ public class DBHelper extends SQLiteOpenHelper {
             );
 
     }
-
     // EDITAR Y LEER DATABASE
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.d(TAG, "Actualizando base de datos de la versión " + oldVersion + " a la versión " + newVersion);
 
         if (oldVersion < 2) {
-            // Crear una nueva tabla sin la restricción NOT NULL
+            // Crear una nueva tabla Detalle_Pedido_Nueva sin la restricción NOT NULL
             db.execSQL("CREATE TABLE Detalle_Pedido_Nueva (" +
                     // Agregar todas las columnas excepto la que se modificará
                     "id_pedido INTEGER PRIMARY KEY AUTOINCREMENT," +
                     // ... Otras columnas ...
                     "costo_pedido INTEGER);");
 
-            // Copiar datos de la tabla original a la nueva tabla
+            // Copiar datos de la tabla Detalle_Pedido original a la nueva tabla
             db.execSQL("INSERT INTO Detalle_Pedido_Nueva SELECT * FROM Detalle_Pedido;");
 
-            // Eliminar la tabla original
+            // Eliminar la tabla Detalle_Pedido original
             db.execSQL("DROP TABLE Detalle_Pedido;");
 
             // Renombrar la nueva tabla al nombre original
             db.execSQL("ALTER TABLE Detalle_Pedido_Nueva RENAME TO Detalle_Pedido;");
         }
 
+        if (oldVersion < 3) {
+            // Eliminar la columna id_divisa de la tabla Producto
+            db.execSQL("CREATE TABLE ProductoTemp AS SELECT id_producto, nombre_producto, descripcion_producto, precio_producto, id_categoria_producto, audit_fecha_insert_, audit_usuario_modif_, audit_fecha_modif_, imagen_producto FROM Producto;");
+            db.execSQL("DROP TABLE Producto;");
+            db.execSQL("CREATE TABLE Producto (id_producto INTEGER PRIMARY KEY AUTOINCREMENT, nombre_producto VARCHAR NOT NULL, descripcion_producto VARCHAR NOT NULL, precio_producto NUMERIC(2) NOT NULL, id_categoria_producto VARCHAR NOT NULL, audit_fecha_insert_ VARCHAR, audit_usuario_modif_ VARCHAR, audit_fecha_modif_ VARCHAR, imagen_producto VARCHAR, FOREIGN KEY (id_categoria_producto) REFERENCES Categoria_Producto (id_categoria_producto));");
+            db.execSQL("INSERT INTO Producto SELECT id_producto, nombre_producto, descripcion_producto, precio_producto, id_categoria_producto, audit_fecha_insert_, audit_usuario_modif_, audit_fecha_modif_, imagen_producto FROM ProductoTemp;");
+            db.execSQL("DROP TABLE ProductoTemp;");
+        }
+
+        if (oldVersion < 4) {
+            // Eliminar la columna duplicada audit_fecha_modif
+            db.execSQL("CREATE TABLE Estado_Pedido_Temp AS SELECT id_estado_pedido, audit_fecha_modif_, nombre_estado_pedido, descripcion_estado_pedido, audit_fecha_insert_, audit_usuario_modif_ FROM Estado_Pedido;");
+            db.execSQL("DROP TABLE Estado_Pedido;");
+            db.execSQL("CREATE TABLE Estado_Pedido (id_estado_pedido INTEGER PRIMARY KEY AUTOINCREMENT, audit_fecha_modif_ VARCHAR, nombre_estado_pedido VARCHAR NOT NULL, descripcion_estado_pedido VARCHAR NOT NULL, audit_fecha_insert_ VARCHAR, audit_usuario_modif_ VARCHAR);");
+            db.execSQL("INSERT INTO Estado_Pedido SELECT id_estado_pedido, audit_fecha_modif_, nombre_estado_pedido, descripcion_estado_pedido, audit_fecha_insert_, audit_usuario_modif_ FROM Estado_Pedido_Temp;");
+            db.execSQL("DROP TABLE Estado_Pedido_Temp;");
+        }
+
         // onCreate(db);
     }
+
+
 
 
             @Override
@@ -545,9 +565,16 @@ public class DBHelper extends SQLiteOpenHelper {
                 return super.getReadableDatabase();
             }
 
-        //  FUNCIONES
+            @Override
+            public void onOpen(SQLiteDatabase db) {
+                super.onOpen(db);
+                // Habilitar claves foráneas al abrir la base de datos
+                db.execSQL("PRAGMA foreign_keys=ON;");
+            }
 
-            // CREAR
+//  FUNCIONES
+
+    // CREAR
 
             // Crear Cuenta
             public void crearCuenta(String nombreUsuario, String correoElectronico, String telefonoUsuario, String contrasenhaUsuario) {
@@ -562,7 +589,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 // Establecer el tipo de usuario por defecto como 3 (Cliente)
                 database.execSQL(insertQuery, new Object[]{nombreUsuario, correoElectronico, telefonoUsuario, contrasenhaUsuario, 4});
 
-                database.close();
+                // database.close();
             }
 
             // Crear Tipo Usuario
@@ -573,13 +600,13 @@ public class DBHelper extends SQLiteOpenHelper {
                             COLUMN_DESCRIPCION_TIPO_USUARIO + ", " +
                             COLUMN_ID_FORMULARIO_PERMISO + ") VALUES (?, ?, ?)";
                     database.execSQL(insertQuery, new Object[]{nombreTipoUsuario, descripcionTipoUsuario, idFormularioPermiso});
-                    database.close();
+                    // database.close();
                 }
 
 
 
-            // Crear Divisa con auditoría
-            public void crearDivisa(String nombreDivisa, String simboloDivisa) {
+        // Crear Divisa con auditoría mejorada
+            public void crearDivisa(String nombreDivisa, String simboloDivisa, String correoUsuario) {
                 SQLiteDatabase database = this.getWritableDatabase();
 
                 try {
@@ -592,8 +619,8 @@ public class DBHelper extends SQLiteOpenHelper {
                         // Obtener fecha y hora actual en formato String
                         String fechaActual = obtenerFechaActual();
 
-                        // Obtener el ID del usuario de alguna manera
-                        long idUsuario = obtenerIdUsuario();
+                        // Obtener el ID del usuario por correo
+                        long idUsuario = obtenerIdUsuarioPorCorreo(correoUsuario);
 
                         // Convertir el ID del usuario a String
                         String idUsuarioString = String.valueOf(idUsuario);
@@ -636,7 +663,249 @@ public class DBHelper extends SQLiteOpenHelper {
                 }
             }
 
-            // Método para verificar si la Divisa ya existe por nombre o símbolo
+
+
+
+        // Crear un Producto con auditoría
+            public void crearProducto(String nombreProducto, String descripcionProducto, int precioProducto, String linkImagenProducto, long idCategoriaProducto) {
+                SQLiteDatabase database = this.getWritableDatabase();
+
+                try {
+                    // Iniciar transacción
+                    database.beginTransaction();
+
+                    // Verificar si el Producto ya existe por nombre
+                    if (productoNoExiste(nombreProducto)) {
+
+                        // Obtener fecha y hora actual en formato String
+                        String fechaActual = obtenerFechaActual();
+
+                        // Crear un objeto ContentValues para insertar datos
+                        ContentValues values = new ContentValues();
+                        values.put(COLUMN_NOMBRE_PRODUCTO, nombreProducto);
+                        values.put(COLUMN_DESCRIPCION_PRODUCTO, descripcionProducto);
+                        values.put(COLUMN_PRECIO_PRODUCTO, precioProducto);
+                        values.put(COLUMN_IMAGEN_PRODUCTO, linkImagenProducto);
+                        values.put(COLUMN_ID_CATEGORIA_PRODUCTO, idCategoriaProducto);
+
+                        // Obtener la fecha y hora de la última modificación del Producto
+                        String ultimaModificacion = obtenerUltimaModificacionProducto(nombreProducto);
+
+                        // Si hay una última modificación, usar esa fecha y hora
+                        // de lo contrario, usar la fecha y hora actual
+                        if (ultimaModificacion != null) {
+                            values.put(COLUMN_AUDIT_FECHA_INSERT_PRODUCTO, ultimaModificacion);
+                        } else {
+                            values.put(COLUMN_AUDIT_FECHA_INSERT_PRODUCTO, fechaActual);
+                        }
+
+                        // Insertar datos en la tabla Producto
+                        database.insert(TABLE_PRODUCTO, null, values);
+
+                        // Marcar la transacción como exitosa
+                        database.setTransactionSuccessful();
+                    } else {
+                        // El Producto ya existe, puedes manejarlo como desees, por ejemplo, mostrar un mensaje de error
+                        Log.e("Error", "El Producto con nombre ya existe");
+                    }
+                } catch (Exception e) {
+                    // Captura cualquier excepción que pueda ocurrir
+                    Log.e("Error", "Error al crear el Producto", e);
+                } finally {
+                    // Finalizar transacción
+                    database.endTransaction();
+                }
+            }
+
+    // Crear una Categoría de Producto con auditoría
+        public void crearCategoriaProducto(String nombreCategoriaProducto, String descripcionCategoriaProducto, String correoUsuario) {
+            SQLiteDatabase database = this.getWritableDatabase();
+
+            try {
+                // Iniciar transacción
+                database.beginTransaction();
+
+                // Verificar si la Categoría de Producto ya existe por nombre
+                if (categoriaProductoNoExiste(nombreCategoriaProducto, descripcionCategoriaProducto)) {
+
+                    // Obtener fecha y hora actual en formato String
+                    String fechaActual = obtenerFechaActual();
+
+                    // Obtener el ID del usuario por correo
+                    long idUsuario = obtenerIdUsuarioPorCorreo(correoUsuario);
+
+                    // Convertir el ID del usuario a String
+                    String idUsuarioString = String.valueOf(idUsuario);
+
+                    // Crear un objeto ContentValues para insertar datos
+                    ContentValues values = new ContentValues();
+                    values.put(COLUMN_NOMBRE_CATEGORIA_PRODUCTO, nombreCategoriaProducto);
+                    values.put(COLUMN_DESCRIPCION_CATEGORIA_PRODUCTO, descripcionCategoriaProducto);
+
+                    // Obtener la fecha y hora de la última modificación de la Categoría de Producto
+                    String ultimaModificacion = obtenerUltimaModificacionCategoriaProducto(nombreCategoriaProducto);
+
+                    // Si hay una última modificación, usar esa fecha y hora
+                    // de lo contrario, usar la fecha y hora actual
+                    if (ultimaModificacion != null) {
+                        values.put(COLUMN_AUDIT_FECHA_INSERT_CATEGORIA_PRODUCTO, ultimaModificacion);
+                    } else {
+                        values.put(COLUMN_AUDIT_FECHA_INSERT_CATEGORIA_PRODUCTO, fechaActual);
+                    }
+
+                    values.put(COLUMN_AUDIT_USUARIO_MODIF_CATEGORIA_PRODUCTO, idUsuarioString);
+                    values.put(COLUMN_AUDIT_FECHA_MODIF_CATEGORIA_PRODUCTO, fechaActual);
+
+                    // Insertar datos en la tabla Categoria_Producto
+                    database.insert(TABLE_CATEGORIA_PRODUCTO, null, values);
+
+                    // Marcar la transacción como exitosa
+                    database.setTransactionSuccessful();
+                } else {
+                    // La Categoría de Producto ya existe, puedes manejarlo como desees, por ejemplo, mostrar un mensaje de error
+                    Log.e("Error", "La Categoría de Producto con nombre ya existe");
+                }
+            } catch (Exception e) {
+                // Captura cualquier excepción que pueda ocurrir
+                Log.e("Error", "Error al crear la Categoría de Producto", e);
+            } finally {
+                // Finalizar la transacción, independientemente de si fue exitosa o no
+                database.endTransaction();
+                // No es necesario cerrar la conexión a la base de datos aquí
+            }
+        }
+
+
+    // Crear un Estado de Pedido con auditoría
+        public void crearEstadoPedido(String nombreEstadoPedido, String descripcionEstadoPedido, String correoUsuario) {
+            SQLiteDatabase database = this.getWritableDatabase();
+
+            try {
+                // Iniciar transacción
+                database.beginTransaction();
+
+                // Verificar si el Estado de Pedido ya existe por nombre
+                if (estadoPedidoNoExiste(nombreEstadoPedido, descripcionEstadoPedido)) {
+
+                    // Obtener fecha y hora actual en formato String
+                    String fechaActual = obtenerFechaActual();
+
+                    // Obtener el ID del usuario por correo
+                    long idUsuario = obtenerIdUsuarioPorCorreo(correoUsuario);
+
+                    // Convertir el ID del usuario a String
+                    String idUsuarioString = String.valueOf(idUsuario);
+
+                    // Crear un objeto ContentValues para insertar datos
+                    ContentValues values = new ContentValues();
+                    values.put(COLUMN_NOMBRE_ESTADO_PEDIDO, nombreEstadoPedido);
+                    values.put(COLUMN_DESCRIPCION_ESTADO_PEDIDO, descripcionEstadoPedido);
+
+                    // Obtener la fecha y hora de la última modificación del Estado de Pedido
+                    String ultimaModificacion = obtenerUltimaModificacionEstadoPedido(nombreEstadoPedido);
+
+                    // Si hay una última modificación, usar esa fecha y hora
+                    // de lo contrario, usar la fecha y hora actual
+                    if (ultimaModificacion != null) {
+                        values.put(COLUMN_AUDIT_FECHA_INSERT_ESTADO_PEDIDO, ultimaModificacion);
+                    } else {
+                        values.put(COLUMN_AUDIT_FECHA_INSERT_ESTADO_PEDIDO, fechaActual);
+                    }
+
+                    values.put(COLUMN_AUDIT_USUARIO_MODIF_ESTADO_PEDIDO, idUsuarioString);
+                    values.put(COLUMN_AUDIT_FECHA_MODIF_ESTADO_PEDIDO, fechaActual);
+
+                    // Insertar datos en la tabla Estado_Pedido
+                    database.insert(TABLE_ESTADO_PEDIDO, null, values);
+
+                    // Marcar la transacción como exitosa
+                    database.setTransactionSuccessful();
+                } else {
+                    // El Estado de Pedido ya existe, puedes manejarlo como desees, por ejemplo, mostrar un mensaje de error
+                    Log.e("Error", "El Estado de Pedido con nombre ya existe");
+                }
+            } catch (Exception e) {
+                // Captura cualquier excepción que pueda ocurrir
+                Log.e("Error", "Error al crear el Estado de Pedido", e);
+            } finally {
+                // Finalizar la transacción, independientemente de si fue exitosa o no
+                database.endTransaction();
+                // No es necesario cerrar la conexión a la base de datos aquí
+            }
+        }
+
+
+        // Crear un Tipo de Pedido con auditoría
+        public void crearTipoPedido(String nombreTipoPedido, String descripcionTipoPedido, String correoUsuario) {
+            SQLiteDatabase database = this.getWritableDatabase();
+
+            try {
+                // Iniciar transacción
+                database.beginTransaction();
+
+                // Verificar si el Tipo de Pedido ya existe por nombre
+                if (tipoPedidoNoExiste(nombreTipoPedido, descripcionTipoPedido)) {
+
+                    // Obtener fecha y hora actual en formato String
+                    String fechaActual = obtenerFechaActual();
+
+                    // Obtener el ID del usuario por correo
+                    long idUsuario = obtenerIdUsuarioPorCorreo(correoUsuario);
+
+                    // Convertir el ID del usuario a String
+                    String idUsuarioString = String.valueOf(idUsuario);
+
+                    // Crear un objeto ContentValues para insertar datos
+                    ContentValues values = new ContentValues();
+                    values.put(COLUMN_NOMBRE_TIPO_PEDIDO, nombreTipoPedido);
+                    values.put(COLUMN_DESCRIPCION_TIPO_PEDIDO, descripcionTipoPedido);
+
+                    // Obtener la fecha y hora de la última modificación del Tipo de Pedido
+                    String ultimaModificacion = obtenerUltimaModificacionTipoPedido(nombreTipoPedido);
+
+                    // Si hay una última modificación, usar esa fecha y hora
+                    // de lo contrario, usar la fecha y hora actual
+                    if (ultimaModificacion != null) {
+                        values.put(COLUMN_AUDIT_FECHA_INSERT_TIPO_PEDIDO, ultimaModificacion);
+                    } else {
+                        values.put(COLUMN_AUDIT_FECHA_INSERT_TIPO_PEDIDO, fechaActual);
+                    }
+
+                    values.put(COLUMN_AUDIT_USUARIO_MODIF_TIPO_PEDIDO, idUsuarioString);
+                    values.put(COLUMN_AUDIT_FECHA_MODIF_TIPO_PEDIDO, fechaActual);
+
+                    // Insertar datos en la tabla Tipo_Pedido
+                    database.insert(TABLE_TIPO_PEDIDO, null, values);
+
+                    // Marcar la transacción como exitosa
+                    database.setTransactionSuccessful();
+                } else {
+                    // El Tipo de Pedido ya existe, puedes manejarlo como desees, por ejemplo, mostrar un mensaje de error
+                    Log.e("Error", "El Tipo de Pedido con nombre ya existe");
+                }
+            } catch (Exception e) {
+                // Captura cualquier excepción que pueda ocurrir
+                Log.e("Error", "Error al crear el Tipo de Pedido", e);
+            } finally {
+                // Finalizar la transacción, independientemente de si fue exitosa o no
+                database.endTransaction();
+                // No es necesario cerrar la conexión a la base de datos aquí
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+// VERIFICAR
+
+    // Método para verificar si la Divisa ya existe por nombre o símbolo
             public boolean divisaNoExiste(String nombreDivisa, String simboloDivisa) {
                 SQLiteDatabase database = this.getReadableDatabase();
 
@@ -654,160 +923,307 @@ public class DBHelper extends SQLiteOpenHelper {
             }
 
 
+    // Método para verificar si el Producto ya existe por nombre
+        public boolean productoNoExiste(String nombreProducto) {
+            SQLiteDatabase database = this.getReadableDatabase();
+
+            String query = "SELECT * FROM " + TABLE_PRODUCTO +
+                    " WHERE " + COLUMN_NOMBRE_PRODUCTO + " = ? ";
+
+            Cursor cursor = database.rawQuery(query, new String[]{nombreProducto});
+
+            boolean noExiste = cursor.getCount() == 0;
+
+            cursor.close();
+
+            return noExiste;
+        }
+
+    // Método para verificar si la Categoría de Producto ya existe por nombre o descripción
+        public boolean categoriaProductoNoExiste(String nombreCategoria, String descripcionCategoria) {
+            SQLiteDatabase database = this.getReadableDatabase();
+
+            String query = "SELECT * FROM " + TABLE_CATEGORIA_PRODUCTO +
+                    " WHERE " + COLUMN_NOMBRE_CATEGORIA_PRODUCTO + " = ? OR " + COLUMN_DESCRIPCION_CATEGORIA_PRODUCTO + " = ?";
+
+            Cursor cursor = database.rawQuery(query, new String[]{nombreCategoria, descripcionCategoria});
+
+            boolean noExiste = cursor.getCount() == 0;
+
+            cursor.close();
+
+            return noExiste;
+        }
+
+    // Método para verificar si el Estado de Pedido ya existe por nombre o descripción
+        public boolean estadoPedidoNoExiste(String nombreEstado, String descripcionEstado) {
+            SQLiteDatabase database = this.getReadableDatabase();
+
+            String query = "SELECT * FROM " + TABLE_ESTADO_PEDIDO +
+                    " WHERE " + COLUMN_NOMBRE_ESTADO_PEDIDO + " = ? OR " + COLUMN_DESCRIPCION_ESTADO_PEDIDO + " = ?";
+
+            Cursor cursor = database.rawQuery(query, new String[]{nombreEstado, descripcionEstado});
+
+            boolean noExiste = cursor.getCount() == 0;
+
+            cursor.close();
+
+            return noExiste;
+        }
+
+    // Método para verificar si el Tipo de Pedido ya existe por nombre o descripción
+        public boolean tipoPedidoNoExiste(String nombreTipoPedido, String descripcionTipoPedido) {
+            SQLiteDatabase database = this.getReadableDatabase();
+
+            String query = "SELECT * FROM " + TABLE_TIPO_PEDIDO +
+                    " WHERE " + COLUMN_NOMBRE_TIPO_PEDIDO + " = ? OR " + COLUMN_DESCRIPCION_TIPO_PEDIDO + " = ?";
+
+            Cursor cursor = database.rawQuery(query, new String[]{nombreTipoPedido, descripcionTipoPedido});
+
+            boolean noExiste = cursor.getCount() == 0;
+
+            cursor.close();
+
+            return noExiste;
+        }
 
 
 
 
 
-            // MÉTODOS PARA AUDITORÍA
+
+
+
+    // MÉTODOS PARA AUDITORÍA
 
             // Método para obtener la fecha actual (para los insert)
-            private String obtenerFechaActual() {
-                Date fecha = new Date();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                return dateFormat.format(fecha);
-            }
-
-            // Método para obtener la última fecha y hora de modificación de la Divisa
-            private String obtenerUltimaModificacionDivisa(String nombreDivisa) {
-                SQLiteDatabase database = this.getReadableDatabase();
-
-                String[] columns = {COLUMN_AUDIT_FECHA_MODIF_DIVISA};
-                String selection = COLUMN_NOMBRE_DIVISA + " = ?";
-                String[] selectionArgs = {nombreDivisa};
-
-                Cursor cursor = database.query(TABLE_DIVISA, columns, selection, selectionArgs, null, null, COLUMN_AUDIT_FECHA_MODIF_DIVISA + " DESC", "1");
-
-                String ultimaModificacion = null;
-                if (cursor.moveToFirst()) {
-                    ultimaModificacion = cursor.getString(cursor.getColumnIndex(COLUMN_AUDIT_FECHA_MODIF_DIVISA));
+                private String obtenerFechaActual() {
+                    Date fecha = new Date();
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                    return dateFormat.format(fecha);
                 }
 
-                cursor.close();
-                return ultimaModificacion;
-            }
+            // Método para obtener la última fecha y hora de modificación de la Divisa
+                private String obtenerUltimaModificacionDivisa(String nombreDivisa) {
+                    SQLiteDatabase database = this.getReadableDatabase();
 
-        // Método para obtener el ID del puto usuario
-        private long obtenerIdUsuario() {
-            // Verifica si hay un usuario autenticado
-            long usuarioID = DBHelper.getUsuarioLogueado();
+                    String[] columns = {COLUMN_AUDIT_FECHA_MODIF_DIVISA};
+                    String selection = COLUMN_NOMBRE_DIVISA + " = ?";
+                    String[] selectionArgs = {nombreDivisa};
 
-            if (usuarioID != -1) {
-                // Si hay un usuario autenticado, devuelve su ID directamente
-                return usuarioID;
-            } else {
-                // No hay usuario autenticado, realiza la lógica necesaria para obtener el ID
+                    Cursor cursor = database.query(TABLE_DIVISA, columns, selection, selectionArgs, null, null, COLUMN_AUDIT_FECHA_MODIF_DIVISA + " DESC", "1");
+
+                    String ultimaModificacion = null;
+                    if (cursor.moveToFirst()) {
+                        ultimaModificacion = cursor.getString(cursor.getColumnIndex(COLUMN_AUDIT_FECHA_MODIF_DIVISA));
+                    }
+
+                    cursor.close();
+                    return ultimaModificacion;
+                }
+
+    // Método para obtener el ID del usuario
+
+        // Método para obtener el correo del puto usuario
+            public int obtenerTipoUsuarioPorCorreo(String correoElectronico) {
                 SQLiteDatabase database = this.getReadableDatabase();
 
-                // Obtener el correo electrónico del usuario de alguna manera
-                String correoUsuario = "correo@example.com";  // Cambia este valor
-
-                String[] columns = {COLUMN_ID_USUARIO};
+                String[] columns = {COLUMN_ID_TIPO_USUARIO_USUARIO};
                 String selection = COLUMN_CORREO_ELECTRONICO + " = ?";
-                String[] selectionArgs = {correoUsuario};
+                String[] selectionArgs = {correoElectronico};
 
                 Cursor cursor = database.query(TABLE_USUARIO, columns, selection, selectionArgs, null, null, null);
 
-                long userID = -1;
+                int tipoUsuario = -1;
+
                 if (cursor.moveToFirst()) {
-                    userID = cursor.getLong(cursor.getColumnIndex(COLUMN_ID_USUARIO));
+                    tipoUsuario = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_TIPO_USUARIO_USUARIO));
                 }
 
                 cursor.close();
-                database.close();
+                // No es necesario cerrar la conexión a la base de datos aquí
 
-                return userID;
+                return tipoUsuario;
             }
-        }
 
-        // Método para obtener el correo del puto usuario
-    public int obtenerTipoUsuarioPorCorreo(String correoElectronico) {
+            // Método para obtener el ID del usuario por su correo electrónico
+            public long obtenerIdUsuarioPorCorreo(String correoElectronico) {
+                SQLiteDatabase database = this.getReadableDatabase();
+
+                String[] columns = {COLUMN_ID_USUARIO};
+                String selection = COLUMN_CORREO_ELECTRONICO + " = ?";
+                String[] selectionArgs = {correoElectronico};
+
+                Cursor cursor = database.query(TABLE_USUARIO, columns, selection, selectionArgs, null, null, null);
+
+                long userId = -1;
+
+                if (cursor.moveToFirst()) {
+                    userId = cursor.getLong(cursor.getColumnIndex(COLUMN_ID_USUARIO));
+                }
+
+                cursor.close();
+                // database.close();
+
+                return userId;
+            }
+
+
+  // OBTENER ULTIMAS MODIFICACIONES
+
+    // Método para obtener la última fecha de modificación de un Producto
+    public String obtenerUltimaModificacionProducto(String nombreProducto) {
         SQLiteDatabase database = this.getReadableDatabase();
 
-        String[] columns = {COLUMN_ID_TIPO_USUARIO_USUARIO};
-        String selection = COLUMN_CORREO_ELECTRONICO + " = ?";
-        String[] selectionArgs = {correoElectronico};
+        String[] columns = {COLUMN_AUDIT_FECHA_MODIF_PRODUCTO};
+        String selection = COLUMN_NOMBRE_PRODUCTO + " = ?";
+        String[] selectionArgs = {nombreProducto};
 
-        Cursor cursor = database.query(TABLE_USUARIO, columns, selection, selectionArgs, null, null, null);
+        Cursor cursor = database.query(TABLE_PRODUCTO, columns, selection, selectionArgs, null, null, COLUMN_AUDIT_FECHA_MODIF_PRODUCTO + " DESC", "1");
 
-        int tipoUsuario = -1;
-
+        String ultimaModificacion = null;
         if (cursor.moveToFirst()) {
-            tipoUsuario = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_TIPO_USUARIO_USUARIO));
+            ultimaModificacion = cursor.getString(cursor.getColumnIndex(COLUMN_AUDIT_FECHA_MODIF_PRODUCTO));
         }
 
         cursor.close();
-        // No es necesario cerrar la conexión a la base de datos aquí
+        // database.close();
 
-        return tipoUsuario;
+        return ultimaModificacion;
+    }
+
+    // Método para obtener la última fecha de modificación de una Categoría de Producto
+    public String obtenerUltimaModificacionCategoriaProducto(String nombreCategoriaProducto) {
+        SQLiteDatabase database = this.getReadableDatabase();
+
+        String[] columns = {COLUMN_AUDIT_FECHA_MODIF_CATEGORIA_PRODUCTO};
+        String selection = COLUMN_NOMBRE_CATEGORIA_PRODUCTO + " = ?";
+        String[] selectionArgs = {nombreCategoriaProducto};
+
+        Cursor cursor = database.query(TABLE_CATEGORIA_PRODUCTO, columns, selection, selectionArgs, null, null, COLUMN_AUDIT_FECHA_MODIF_CATEGORIA_PRODUCTO + " DESC", "1");
+
+        String ultimaModificacion = null;
+        if (cursor.moveToFirst()) {
+            ultimaModificacion = cursor.getString(cursor.getColumnIndex(COLUMN_AUDIT_FECHA_MODIF_CATEGORIA_PRODUCTO));
+        }
+
+        cursor.close();
+        // database.close();
+
+        return ultimaModificacion;
+    }
+
+    // Método para obtener la última fecha de modificación de un Estado de Pedido
+    public String obtenerUltimaModificacionEstadoPedido(String nombreEstadoPedido) {
+        SQLiteDatabase database = this.getReadableDatabase();
+
+        String[] columns = {COLUMN_AUDIT_FECHA_MODIF_ESTADO_PEDIDO};
+        String selection = COLUMN_NOMBRE_ESTADO_PEDIDO + " = ?";
+        String[] selectionArgs = {nombreEstadoPedido};
+
+        Cursor cursor = database.query(TABLE_ESTADO_PEDIDO, columns, selection, selectionArgs, null, null, COLUMN_AUDIT_FECHA_MODIF_ESTADO_PEDIDO + " DESC", "1");
+
+        String ultimaModificacion = null;
+        if (cursor.moveToFirst()) {
+            ultimaModificacion = cursor.getString(cursor.getColumnIndex(COLUMN_AUDIT_FECHA_MODIF_ESTADO_PEDIDO));
+        }
+
+        cursor.close();
+        // database.close();
+
+        return ultimaModificacion;
+    }
+
+
+    // Método para obtener la última fecha de modificación de un Tipo de Pedido
+    public String obtenerUltimaModificacionTipoPedido(String nombreTipoPedido) {
+        SQLiteDatabase database = this.getReadableDatabase();
+
+        String[] columns = {COLUMN_AUDIT_FECHA_MODIF_TIPO_PEDIDO};
+        String selection = COLUMN_NOMBRE_TIPO_PEDIDO + " = ?";
+        String[] selectionArgs = {nombreTipoPedido};
+
+        Cursor cursor = database.query(TABLE_TIPO_PEDIDO, columns, selection, selectionArgs, null, null, COLUMN_AUDIT_FECHA_MODIF_TIPO_PEDIDO + " DESC", "1");
+
+        String ultimaModificacion = null;
+        if (cursor.moveToFirst()) {
+            ultimaModificacion = cursor.getString(cursor.getColumnIndex(COLUMN_AUDIT_FECHA_MODIF_TIPO_PEDIDO));
+        }
+
+        cursor.close();
+        // database.close();
+
+        return ultimaModificacion;
     }
 
 
 
-    // Comprobar Credenciales
+    // COMPROBAR CREDENCIALES
+                public boolean comprobarCredenciales(String correoElectronico, String contrasenhaUsuario) {
+                SQLiteDatabase database = this.getReadableDatabase();
+                String query = "SELECT * FROM " + TABLE_USUARIO + " WHERE " + COLUMN_CORREO_ELECTRONICO + " = ? AND " + COLUMN_CONTRASENHA_USUARIO + " = ? ";
+                Cursor cursor = database.rawQuery(query, new String[]{correoElectronico, contrasenhaUsuario});
 
-            public boolean comprobarCredenciales(String correoElectronico, String contrasenhaUsuario) {
-            SQLiteDatabase database = this.getReadableDatabase();
-            String query = "SELECT * FROM " + TABLE_USUARIO + " WHERE " + COLUMN_CORREO_ELECTRONICO + " = ? AND " + COLUMN_CONTRASENHA_USUARIO + " = ? ";
-            Cursor cursor = database.rawQuery(query, new String[]{correoElectronico, contrasenhaUsuario});
+                if (cursor.getCount() > 0) {
+                    cursor.close();
+                    return true;
 
-            if (cursor.getCount() > 0) {
-                cursor.close();
-                return true;
+                } else {
+                    cursor.close();
+                    return false;
 
-            } else {
-                cursor.close();
-                return false;
-
+                    }
                 }
-            }
 
-        public boolean comprobarCorreo(String correoElectronico) {
-            SQLiteDatabase database = this.getReadableDatabase();
-            String query = "SELECT * FROM " + TABLE_USUARIO + " WHERE " + COLUMN_CORREO_ELECTRONICO + " = ?";
-            Cursor cursor = database.rawQuery(query, new String[]{correoElectronico});
+                public boolean comprobarCorreo(String correoElectronico) {
+                    SQLiteDatabase database = this.getReadableDatabase();
+                    String query = "SELECT * FROM " + TABLE_USUARIO + " WHERE " + COLUMN_CORREO_ELECTRONICO + " = ?";
+                    Cursor cursor = database.rawQuery(query, new String[]{correoElectronico});
 
-            if (cursor.getCount() > 0) {
-                cursor.close();
-                return true;
-            } else {
-                cursor.close();
-                return false;
-            }
-        }
+                    if (cursor.getCount() > 0) {
+                        cursor.close();
+                        return true;
+                    } else {
+                        cursor.close();
+                        return false;
+                    }
+                }
 
-        // Actualizar datos
+// ACTUALIZAR
 
-        public void actualizarContrasenha(String correoElectronico, String nuevaContrasenha) {
-            SQLiteDatabase db = this.getWritableDatabase();
-            ContentValues valores = new ContentValues();
-            valores.put(COLUMN_CONTRASENHA_USUARIO, nuevaContrasenha);
-            db.update(TABLE_USUARIO, valores, COLUMN_CORREO_ELECTRONICO + " = ?", new String[]{correoElectronico});
-            db.close();
-        }
+            // Actualizar Contraseña
+                public void actualizarContrasenha(String correoElectronico, String nuevaContrasenha) {
+                    SQLiteDatabase db = this.getWritableDatabase();
+                    ContentValues valores = new ContentValues();
+                    valores.put(COLUMN_CONTRASENHA_USUARIO, nuevaContrasenha);
+                    db.update(TABLE_USUARIO, valores, COLUMN_CORREO_ELECTRONICO + " = ?", new String[]{correoElectronico});
+                    db.close();
+                }
 
-    public void actualizarDivisa(int idDivisa, String nuevoNombre, String nuevoSimbolo) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues valores = new ContentValues();
-        valores.put(COLUMN_NOMBRE_DIVISA, nuevoNombre);
-        valores.put(COLUMN_SIMBOLO_DIVISA, nuevoSimbolo);
-        db.update(TABLE_DIVISA, valores, COLUMN_ID_DIVISA + " = ?", new String[]{String.valueOf(idDivisa)});
-        db.close();
-    }
+            // Actualizar Divisa
+                public void actualizarDivisa(int idDivisa, String nuevoNombre, String nuevoSimbolo) {
+                    SQLiteDatabase db = this.getWritableDatabase();
+                    ContentValues valores = new ContentValues();
+                    valores.put(COLUMN_NOMBRE_DIVISA, nuevoNombre);
+                    valores.put(COLUMN_SIMBOLO_DIVISA, nuevoSimbolo);
+                    db.update(TABLE_DIVISA, valores, COLUMN_ID_DIVISA + " = ?", new String[]{String.valueOf(idDivisa)});
+                    db.close();
+                }
 
-    public void actualizarTipoUsuario(String correoElectronico, int nuevoIdTipoUsuario) {
-            SQLiteDatabase db = this.getWritableDatabase();
-            ContentValues valores = new ContentValues();
-            valores.put(COLUMN_ID_TIPO_USUARIO_USUARIO, nuevoIdTipoUsuario);
-            db.update(TABLE_USUARIO, valores, COLUMN_CORREO_ELECTRONICO + " = ?", new String[]{correoElectronico});
-            db.close();
-        }
+           // Actualizar Tipo Usuario
+                public void actualizarTipoUsuario(String correoElectronico, int nuevoIdTipoUsuario) {
+                        SQLiteDatabase db = this.getWritableDatabase();
+                        ContentValues valores = new ContentValues();
+                        valores.put(COLUMN_ID_TIPO_USUARIO_USUARIO, nuevoIdTipoUsuario);
+                        db.update(TABLE_USUARIO, valores, COLUMN_CORREO_ELECTRONICO + " = ?", new String[]{correoElectronico});
+                        db.close();
+                    }
 
 
 
-    // Get Usuario ID
-            @SuppressLint("Range")
-            public long getUsuarioID(String mail) {
+        // Get Usuario ID
+        @SuppressLint("Range")
+        public long getUsuarioID(String mail) {
             SQLiteDatabase database = this.getReadableDatabase();
             String[] columns = {COLUMN_ID_USUARIO};
             String selection = COLUMN_CORREO_ELECTRONICO + " = ?";
@@ -853,89 +1269,307 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-        // LISTA DE USUARIOS
-        @SuppressLint("Range")
-        public List<Usuario> obtenerListaUsuarios() {
-            List<Usuario> usuarios = new ArrayList<>();
 
-            SQLiteDatabase database = this.getReadableDatabase();
-            String[] columns = {
-                    COLUMN_NOMBRE_USUARIO,
-                    COLUMN_CORREO_ELECTRONICO,
-                    COLUMN_TELEFONO_USUARIO
-            };
 
-            Cursor cursor = database.query(TABLE_USUARIO, columns, null, null, null, null, null);
+    // OBTENER LISTAS
 
-            try {
-                while (cursor.moveToNext()) {
-                    String nombre = cursor.getString(cursor.getColumnIndex(COLUMN_NOMBRE_USUARIO));
-                    String correo = cursor.getString(cursor.getColumnIndex(COLUMN_CORREO_ELECTRONICO));
-                    String telefono = cursor.getString(cursor.getColumnIndex(COLUMN_TELEFONO_USUARIO));
+            // Lista de Usuarios
+                @SuppressLint("Range")
+                public List<Usuario> obtenerListaUsuarios() {
+                    List<Usuario> usuarios = new ArrayList<>();
 
-                    Usuario usuario = new Usuario(nombre, correo, telefono);
-                    usuarios.add(usuario);
+                    SQLiteDatabase database = this.getReadableDatabase();
+                    String[] columns = {
+                            COLUMN_NOMBRE_USUARIO,
+                            COLUMN_CORREO_ELECTRONICO,
+                            COLUMN_TELEFONO_USUARIO
+                    };
+
+                    Cursor cursor = database.query(TABLE_USUARIO, columns, null, null, null, null, null);
+
+                    try {
+                        while (cursor.moveToNext()) {
+                            String nombre = cursor.getString(cursor.getColumnIndex(COLUMN_NOMBRE_USUARIO));
+                            String correo = cursor.getString(cursor.getColumnIndex(COLUMN_CORREO_ELECTRONICO));
+                            String telefono = cursor.getString(cursor.getColumnIndex(COLUMN_TELEFONO_USUARIO));
+
+                            Usuario usuario = new Usuario(nombre, correo, telefono);
+                            usuarios.add(usuario);
+                        }
+                    } finally {
+                        cursor.close();
+                    }
+
+                    // Cierra la base de datos
+                    // database.close();
+
+                    // Agrega logs para depuración
+                    for (Usuario usuario : usuarios) {
+                        Log.d("Usuario", "Nombre: " + usuario.getNombreUsuario() + ", Correo: " + usuario.getCorreoElectronico() + ", Teléfono: " + usuario.getTelefonoUsuario());
+                    }
+
+                    return usuarios;
                 }
-            } finally {
-                cursor.close();
-            }
 
-            // Cierra la base de datos
-            database.close();
+            // Lista de Divisas
+                public List<Divisa> obtenerListaDivisas() {
+                    List<Divisa> divisas = new ArrayList<>();
 
-            // Agrega logs para depuración
-            for (Usuario usuario : usuarios) {
-                Log.d("Usuario", "Nombre: " + usuario.getNombreUsuario() + ", Correo: " + usuario.getCorreoElectronico() + ", Teléfono: " + usuario.getTelefonoUsuario());
-            }
+                    SQLiteDatabase database = this.getReadableDatabase();
+                    String[] columns = {
+                            COLUMN_NOMBRE_DIVISA,
+                            COLUMN_SIMBOLO_DIVISA
+                    };
 
-            return usuarios;
-        }
+                    Cursor cursor = database.query(TABLE_DIVISA, columns, null, null, null, null, null);
 
-    // LISTA DE DIVISAS
-    public List<Divisa> obtenerListaDivisas() {
-        List<Divisa> divisas = new ArrayList<>();
+                    try {
+                        while (cursor.moveToNext()) {
+                            String nombreDivisa = cursor.getString(cursor.getColumnIndex(COLUMN_NOMBRE_DIVISA));
+                            String simboloDivisa = cursor.getString(cursor.getColumnIndex(COLUMN_SIMBOLO_DIVISA));
+
+                            Divisa divisa = new Divisa(nombreDivisa, simboloDivisa);
+                            divisas.add(divisa);
+                        }
+                    } finally {
+                        cursor.close();
+                    }
+
+                    // Cierra la base de datos
+                    // database.close();
+
+                    // Agrega logs para depuración
+                    for (Divisa divisa : divisas) {
+                        Log.d("Divisa", "Nombre: " + divisa.getNombreDivisa() + ", Símbolo: " + divisa.getSimboloDivisa());
+                    }
+
+                    return divisas;
+                }
+
+           // Lista de productos
+               public List<Producto> obtenerListaProductos() {
+                   List<Producto> productos = new ArrayList<>();
+
+                   SQLiteDatabase database = this.getReadableDatabase();
+                   String[] columns = {
+                           COLUMN_NOMBRE_PRODUCTO,
+                           COLUMN_DESCRIPCION_PRODUCTO,
+                           COLUMN_ID_CATEGORIA_PRODUCTO  // Asegúrate de incluir la columna de la categoría
+                   };
+
+                   Cursor cursor = database.query(TABLE_PRODUCTO, columns, null, null, null, null, null);
+
+                   try {
+                       while (cursor.moveToNext()) {
+                           String nombreProducto = cursor.getString(cursor.getColumnIndex(COLUMN_NOMBRE_PRODUCTO));
+                           String descripcionProducto = cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPCION_PRODUCTO));
+                           int idCategoriaProducto = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_CATEGORIA_PRODUCTO));
+
+                           // Aquí puedes llamar a otro método en DBHelper para obtener el nombre de la categoría
+                           String nombreCategoria = obtenerNombreCategoriaPorId(idCategoriaProducto);
+
+                           // Crear un objeto Producto y agregarlo a la lista
+                           Producto producto = new Producto(nombreProducto, descripcionProducto, idCategoriaProducto);
+                           productos.add(producto);
+                       }
+                   } finally {
+                       cursor.close();
+                   }
+
+                   // Agrega logs para depuración
+                   for (Producto producto : productos) {
+                       Log.d("Producto", "Nombre: " + producto.getNombreProducto() + ", Descripción: " + producto.getDescripcionProducto() + ", Categoría: " + producto.getIdCategoriaProducto());
+                   }
+
+                   return productos;
+               }
+
+
+    // Lista de categorías de productos
+    public List<CategoriaProducto> obtenerListaCategoriasProducto() {
+        List<CategoriaProducto> categoriasProducto = new ArrayList<>();
 
         SQLiteDatabase database = this.getReadableDatabase();
         String[] columns = {
-                COLUMN_NOMBRE_DIVISA,
-                COLUMN_SIMBOLO_DIVISA
+                COLUMN_NOMBRE_CATEGORIA_PRODUCTO,
+                COLUMN_DESCRIPCION_CATEGORIA_PRODUCTO
         };
 
-        Cursor cursor = database.query(TABLE_DIVISA, columns, null, null, null, null, null);
+        Cursor cursor = database.query(TABLE_CATEGORIA_PRODUCTO, columns, null, null, null, null, null);
 
         try {
             while (cursor.moveToNext()) {
-                String nombreDivisa = cursor.getString(cursor.getColumnIndex(COLUMN_NOMBRE_DIVISA));
-                String simboloDivisa = cursor.getString(cursor.getColumnIndex(COLUMN_SIMBOLO_DIVISA));
+                String nombreCategoriaProducto = cursor.getString(cursor.getColumnIndex(COLUMN_NOMBRE_CATEGORIA_PRODUCTO));
+                String descripcionCategoriaProducto = cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPCION_CATEGORIA_PRODUCTO));
 
-                Divisa divisa = new Divisa(nombreDivisa, simboloDivisa);
-                divisas.add(divisa);
+                // Crear un objeto CategoriaProducto y agregarlo a la lista
+                CategoriaProducto categoriaProducto = new CategoriaProducto(nombreCategoriaProducto, descripcionCategoriaProducto);
+                categoriasProducto.add(categoriaProducto);
             }
         } finally {
             cursor.close();
         }
 
-        // Cierra la base de datos
-        database.close();
-
         // Agrega logs para depuración
-        for (Divisa divisa : divisas) {
-            Log.d("Divisa", "Nombre: " + divisa.getNombreDivisa() + ", Símbolo: " + divisa.getSimboloDivisa());
+        for (CategoriaProducto categoriaProducto : categoriasProducto) {
+            Log.d("CategoriaProducto", "Nombre: " + categoriaProducto.getNombreCategoriaProducto() + ", Descripción: " + categoriaProducto.getDescripcionCategoriaProducto());
         }
 
-        return divisas;
+        return categoriasProducto;
+    }
+
+    // Lista de tipos de pedido
+    public List<TipoPedido> obtenerListaTiposPedido() {
+        List<TipoPedido> tiposPedido = new ArrayList<>();
+
+        SQLiteDatabase database = this.getReadableDatabase();
+        String[] columns = {
+                COLUMN_NOMBRE_TIPO_PEDIDO,
+                COLUMN_DESCRIPCION_TIPO_PEDIDO
+        };
+
+        Cursor cursor = database.query(TABLE_TIPO_PEDIDO, columns, null, null, null, null, null);
+
+        try {
+            while (cursor.moveToNext()) {
+                String nombreTipoPedido = cursor.getString(cursor.getColumnIndex(COLUMN_NOMBRE_TIPO_PEDIDO));
+                String descripcionTipoPedido = cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPCION_TIPO_PEDIDO));
+
+                // Crear un objeto TipoPedido y agregarlo a la lista
+                TipoPedido tipoPedido = new TipoPedido(nombreTipoPedido, descripcionTipoPedido);
+                tiposPedido.add(tipoPedido);
+            }
+        } finally {
+            cursor.close();
+        }
+
+        // Agrega logs para depuración
+        for (TipoPedido tipoPedido : tiposPedido) {
+            Log.d("TipoPedido", "Nombre: " + tipoPedido.getNombreTipoPedido() + ", Descripción: " + tipoPedido.getDescripcionTipoPedido());
+        }
+
+        return tiposPedido;
+    }
+
+
+    // Lista de estados de pedido
+    public List<EstadoPedido> obtenerListaEstadosPedido() {
+        List<EstadoPedido> estadosPedido = new ArrayList<>();
+
+        SQLiteDatabase database = this.getReadableDatabase();
+        String[] columns = {
+                COLUMN_NOMBRE_ESTADO_PEDIDO,
+                COLUMN_DESCRIPCION_ESTADO_PEDIDO
+        };
+
+        Cursor cursor = database.query(TABLE_ESTADO_PEDIDO, columns, null, null, null, null, null);
+
+        try {
+            while (cursor.moveToNext()) {
+                String nombreEstadoPedido = cursor.getString(cursor.getColumnIndex(COLUMN_NOMBRE_ESTADO_PEDIDO));
+                String descripcionEstadoPedido = cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPCION_ESTADO_PEDIDO));
+
+                // Crear un objeto EstadoPedido y agregarlo a la lista
+                EstadoPedido estadoPedido = new EstadoPedido(nombreEstadoPedido, descripcionEstadoPedido);
+                estadosPedido.add(estadoPedido);
+            }
+        } finally {
+            cursor.close();
+        }
+
+        // Agrega logs para depuración
+        for (EstadoPedido estadoPedido : estadosPedido) {
+            Log.d("EstadoPedido", "Nombre: " + estadoPedido.getNombreEstadoPedido() + ", Descripción: " + estadoPedido.getDescripcionEstadoPedido());
+        }
+
+        return estadosPedido;
     }
 
 
 
-    // ELIMINAR DIVISA
-    // Método para eliminar una divisa por su ID
-    public void eliminarDivisa(int idDivisa) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_DIVISA, COLUMN_ID_DIVISA + " = ?",
-                new String[]{String.valueOf(idDivisa)});
-        db.close();
-    }
+
+
+    // ELIMINAR
+
+            // Método para eliminar una divisa por su ID
+                public void eliminarDivisa(int idDivisa) {
+                    SQLiteDatabase db = this.getWritableDatabase();
+                    db.delete(TABLE_DIVISA, COLUMN_ID_DIVISA + " = ?",
+                            new String[]{String.valueOf(idDivisa)});
+                    db.close();
+                }
+
+
+
+    // OBTENER
+
+
+
+        // Categoria Producto
+
+            // Método para obtener la lista de nombres de categorías
+                    public List<String> obtenerCategoriaProducto() {
+                        SQLiteDatabase database = this.getReadableDatabase();
+
+                        List<String> categorias = new ArrayList<>();
+
+                        // Obtén solo los nombres de las categorías
+                        String[] columns = {COLUMN_NOMBRE_CATEGORIA_PRODUCTO};
+                        Cursor cursor = database.query(TABLE_CATEGORIA_PRODUCTO, columns, null, null, null, null, null);
+
+                        // Itera a través del cursor y agrega los nombres de categorías a la lista
+                        while (cursor.moveToNext()) {
+                            String nombreCategoria = cursor.getString(cursor.getColumnIndex(COLUMN_NOMBRE_CATEGORIA_PRODUCTO));
+                            categorias.add(nombreCategoria);
+                        }
+
+                        cursor.close();
+                        // database.close();
+
+                        return categorias;
+                    }
+
+
+            // Método para obtener el ID de la categoría de producto por nombre
+            public int obtenerIdCategoriaProducto(String nombreCategoria) {
+                SQLiteDatabase database = this.getReadableDatabase();
+
+                String[] columns = {COLUMN_ID_CATEGORIA_PRODUCTO};
+                String selection = COLUMN_NOMBRE_CATEGORIA_PRODUCTO + " = ?";
+                String[] selectionArgs = {nombreCategoria};
+
+                Cursor cursor = database.query(TABLE_CATEGORIA_PRODUCTO, columns, selection, selectionArgs, null, null, null);
+
+                int categoriaID = -1;
+                if (cursor.moveToFirst()) {
+                    categoriaID = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_CATEGORIA_PRODUCTO));
+                }
+
+                cursor.close();
+                // database.close();
+
+                return categoriaID;
+            }
+
+            // Método para obtener el nombre de la categoría por ID
+            public String obtenerNombreCategoriaPorId(int idCategoria) {
+                SQLiteDatabase db = this.getReadableDatabase();
+                String[] projection = {COLUMN_NOMBRE_CATEGORIA_PRODUCTO}; // Reemplaza con el nombre real de la columna de nombre de categoría
+
+                Cursor cursor = db.query(TABLE_CATEGORIA_PRODUCTO, projection, COLUMN_ID_CATEGORIA_PRODUCTO + " = ?",
+                        new String[]{String.valueOf(idCategoria)}, null, null, null);
+
+                String nombreCategoria = null;
+
+                if (cursor != null && cursor.moveToFirst()) {
+                    nombreCategoria = cursor.getString(cursor.getColumnIndex(COLUMN_NOMBRE_CATEGORIA_PRODUCTO));
+                    cursor.close();
+                }
+
+                return nombreCategoria;
+            }
+
+
 
 
 }

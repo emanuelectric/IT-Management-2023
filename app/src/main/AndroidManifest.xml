@@ -16,7 +16,7 @@
 
     <!-- Actividades -->
 
-    <!-- Actividad principal al iniciar -->
+        <!-- Actividad principal al iniciar -->
     <activity
         android:name=".activities.MainActivity"
         android:exported="true">
@@ -46,11 +46,26 @@
         <activity android:name=".activities.FormularioPedidosActivity" />
         <activity android:name=".activities.FormularioResenhasActivity" />
         <activity android:name=".activities.FormularioRolesActivity" />
+        <activity android:name=".activities.FormularioProductosActivity" />
+        <activity android:name=".activities.FormularioCategoriaProductoActivity" />
+        <activity android:name=".activities.FormularioTipoPedidoActivity" />
+        <activity android:name=".activities.FormularioEstadoPedidoActivity" />
+
+        <!-- Listas -->
+        <activity android:name=".activities.ListaCategoriasProductoActivity" />
+        <activity android:name=".activities.ListaDivisasActivity" />
+        <activity android:name=".activities.ListaEstadosPedidoActivity" />
+        <activity android:name=".activities.ListaProductosActivity" />
+        <activity android:name=".activities.ListaTiposPedidoActivity" />
+        <activity android:name=".activities.ListaUsuariosActivity" />
+
 
         <!-- Otros -->
-        <activity android:name=".activities.ListaUsuariosActivity" />
-        <activity android:name=".activities.ListaDivisasActivity" />
+
         <activity android:name=".activities.EditarDivisaActivity" />
+        <activity android:name=".activities.EditarProductoActivity" />
+
+
 
         <!--<activity android:name=".activities.FormularioCambiarContrasenha01Activity" />
         <activity android:name=".activities.FormularioCambiarContrasenha02Activity" />

@@ -19,7 +19,7 @@ public class FormularioCambiarContrasenha01Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.formulario_cambiar_contrasenha_01_layout);
+        setContentView(R.layout.formulario_restablecer_contrasenha_01_layout);
 
         // Inicializar la instancia de DBHelper
         dbHelper = new DBHelper(this);
@@ -49,8 +49,8 @@ public class FormularioCambiarContrasenha01Activity extends AppCompatActivity {
     }
 
     // Método para ir a la pantalla inicial
-    public void LanzarVistaMenuInicialRC(View view) {
-        Intent intent = new Intent(this, MenuInicialActivity.class);
+    public void LanzarVistaMenuPrincipal(View view) {
+        Intent intent = new Intent(this, MenuPrincipalSuperadministradorActivity.class);
         startActivity(intent);
     }
 }

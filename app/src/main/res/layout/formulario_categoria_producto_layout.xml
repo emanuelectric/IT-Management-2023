@@ -14,16 +14,23 @@
         android:layout_marginTop="30dp"
         android:layout_marginLeft="10dp"
         android:clickable="true"
-        android:onClick="LanzarVistaMenuInicialRC" />
+        android:onClick="irListaCategoriasProducto" />
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="312dp"
-        android:layout_height="60dp"
+        android:id="@+id/textView_agregarCategoríaDeProductos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="60dp"
         android:layout_marginTop="30dp"
-        android:text="Restablecer contraseña"
+        android:text="Agregar Categoría de productos"
         android:textSize="25dp" />
+
+    <ImageView
+        android:id="@+id/imageView15"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="190dp"
+        app:srcCompat="@drawable/bloque_texto" />
 
     <ImageView
         android:id="@+id/imageView16"
@@ -33,7 +40,18 @@
         app:srcCompat="@drawable/bloque_texto" />
 
     <EditText
-        android:id="@+id/edittext_recuperarContrasenha_correoElectronico"
+        android:id="@+id/edittext_nombreCategoriaProducto"
+        android:layout_width="302dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="55dp"
+        android:layout_marginTop="205dp"
+        android:ems="10"
+        android:hint="Nombre categoría (Ej: Postres)"
+        android:textColor="@color/dark_grey"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/edittext_descripcionCategoriaProducto"
         android:layout_width="299dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="55dp"
@@ -41,30 +59,22 @@
         android:ems="10"
         android:inputType="text"
         android:textColor="@color/dark_grey"
-        android:hint="Correo Electrónico" />
-
-    <TextView
-        android:id="@+id/txt_olvidar_contrasenha"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/boton_siguiente_restablecer_contrasenha"
-        android:layout_marginLeft="45dp"
-        android:layout_marginTop="-174dp"
-        android:text="Ingresa tu correo electrónico"
-        android:textColor="#000000"
-        android:textSize="14sp" />
+        android:hint="Descripción categoría" />
 
     <Button
-        android:id="@+id/boton_siguiente_restablecer_contrasenha"
+        android:id="@+id/boton_guardarCategoriaProducto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/imageView16"
         android:layout_marginTop="20dp"
-        android:onClick="siguienteRestablecerContrasenha"
+        android:onClick="guardarCategoriaProducto"
         android:textColor="#FFFFFF"
-        android:text="Siguiente"
+        android:text="Guardar"
         android:textSize="16sp"
         android:background="@drawable/boton_redondeado_rojo"
         android:padding="12dp" />
+
+
+
 </RelativeLayout>

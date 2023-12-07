@@ -10,7 +10,7 @@
         android:id="@+id/imageViewAvatar"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@drawable/ic_estadopedido" />
+        android:src="@drawable/ic_producto" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -20,12 +20,26 @@
         android:layout_marginStart="16dp">
 
         <TextView
-            android:id="@+id/textViewNombreEstadoPedido"
-            android:layout_width="191dp"
+            android:id="@+id/textViewNombreProducto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nombre del Estado de Pedido"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:text="Nombre del producto" />
+
+        <TextView
+            android:id="@+id/textViewDescripcionProducto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="Descripción del producto" />
+
+        <TextView
+            android:id="@+id/textViewNombreCategoriaProducto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="Categoría del producto" />
 
     </LinearLayout>
 
@@ -36,7 +50,7 @@
         android:background="@android:color/transparent"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_edit"
-        android:onClick="irEditarDivisa"/>
+        android:onClick="irEditarProducto"/>
 
     <ImageButton
         android:id="@+id/imageButton2"
@@ -45,6 +59,6 @@
         android:background="@android:color/transparent"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_delete"
-        android:onClick="eliminarDivisa"/>
+        android:onClick="eliminarProducto"/>
 
 </LinearLayout>

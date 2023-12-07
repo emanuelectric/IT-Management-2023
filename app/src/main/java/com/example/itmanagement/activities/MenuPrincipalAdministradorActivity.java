@@ -120,7 +120,7 @@ public class MenuPrincipalAdministradorActivity extends AppCompatActivity {
             return true;
         } else if (itemId == R.id.agregar_pedido) {
             // Abre el layout correspondiente para "Estados"
-            abrirLayoutEstados();
+            abrirLayoutPedidos();
             return true;
         } else if (itemId == R.id.agregar_resenha) {
             // Abre el layout correspondiente para "Calificaciones"
@@ -153,7 +153,7 @@ public class MenuPrincipalAdministradorActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void abrirLayoutEstados() {
+    private void abrirLayoutPedidos() {
         // Lógica para abrir el layout de Estados
         Intent intent = new Intent(this, FormularioPedidosActivity.class);
         startActivity(intent);
@@ -172,7 +172,7 @@ public class MenuPrincipalAdministradorActivity extends AppCompatActivity {
     }
 
     private void abrirLayoutRoles() {
-        // Lógica para abrir el layout de Cambiar Contraseña
+        // Lógica para abrir el layout de Roles
         Intent intent = new Intent(this, FormularioRolesActivity.class);
         startActivity(intent);
     }

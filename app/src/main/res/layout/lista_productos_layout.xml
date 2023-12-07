@@ -18,31 +18,31 @@
         android:onClick="LanzarVistaMenuPrincipal" />
 
     <TextView
-        android:id="@+id/textView_UsuariosRoles"
+        android:id="@+id/textView_productos"
         android:layout_width="235dp"
         android:layout_height="45dp"
         android:layout_marginLeft="60dp"
         android:layout_marginTop="30dp"
-        android:text="Usuarios y roles"
+        android:text="Productos"
         android:textSize="25dp" />
 
     <ListView
-        android:id="@+id/listView_ListaUsuarios"
+        android:id="@+id/listView_ListaProductos"
         android:layout_width="wrap_content"
         android:layout_height="517dp"
-        android:layout_below="@+id/textView_UsuariosRoles"
+        android:layout_below="@+id/textView_productos"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="10dp" />
 
     <ImageView
-        android:id="@+id/imageView_agregarUsuario"
+        android:id="@+id/imageView_agregarProducto"
         android:layout_width="500dp"
         android:layout_height="80dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop= "620dp"
+        android:layout_marginTop="620dp"
         app:srcCompat="@drawable/ic_additem"
         android:clickable="true"
-        android:onClick="LanzarVistaMenuPrincipal"/>
+        android:onClick="irAgregarProducto"/>
 
 </RelativeLayout>

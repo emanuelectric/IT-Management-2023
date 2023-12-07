@@ -1,12 +1,15 @@
 package com.example.itmanagement.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.itmanagement.R;
@@ -78,18 +81,57 @@ public class ListaDivisasActivity extends AppCompatActivity {
     }
 
     // Método para eliminar una divisa
-    public void eliminarDivisa(View view) {
-        int position = listViewDivisas.getPositionForView(view);
-        Divisa divisaSeleccionada = listaDivisas.get(position);
+    public void eliminarDivisa(final View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirmar Eliminación");
+        builder.setMessage("¿Estás seguro de que deseas eliminar esta divisa?");
 
-        // Llama al método en DBHelper para eliminar la divisa
-        DBHelper dbHelper = new DBHelper(this);
-        dbHelper.eliminarDivisa(divisaSeleccionada.getIdDivisa());
+        // Agregar botón de confirmación
+        builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // Obtener la divisa seleccionada
+                int position = listViewDivisas.getPositionForView(view);
+                Divisa divisaSeleccionada = listaDivisas.get(position);
 
-        // Actualiza la lista después de la eliminación
-        listaDivisas.remove(divisaSeleccionada);
-        divisaAdapter.notifyDataSetChanged();
+                // Llama al método en DBHelper para eliminar la divisa
+                DBHelper dbHelper = new DBHelper(getApplicationContext());
+                dbHelper.eliminarDivisa(divisaSeleccionada.getIdDivisa());
 
-        mostrarToast("Divisa eliminada correctamente");
+                // Actualiza la lista después de la eliminación
+                listaDivisas.remove(divisaSeleccionada);
+                divisaAdapter.notifyDataSetChanged();
+
+                // Imprime la lista para verificar
+                for (Divisa divisa : listaDivisas) {
+                    Log.d("ListaDivisas", "ID Divisa: " + divisa.getIdDivisa());
+                }
+
+                mostrarToast("Divisa eliminada correctamente");
+            }
+        });
+
+        // Agregar botón de cancelación
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // No hacer nada, simplemente cerrar el cuadro de diálogo
+            }
+        });
+
+        // Mostrar el cuadro de diálogo
+        builder.show();
     }
+
+
+
+    public void LanzarVistaMenuPrincipal(View view) {
+        Intent intent = new Intent(this, MenuPrincipalSuperadministradorActivity.class);
+        startActivity(intent);
+    }
+
+    // Agregar Divisa
+    public void irAgregarDivisa(View view) {
+        Intent intent = new Intent(this, FormularioDivisasActivity.class);
+        startActivity(intent);
+    }
+
 }

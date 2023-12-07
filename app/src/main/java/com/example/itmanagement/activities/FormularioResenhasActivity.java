@@ -18,7 +18,7 @@ public class FormularioResenhasActivity extends AppCompatActivity {
 
     // Método para ir a la pantalla principal
     public void LanzarVistaMenuPrincipal(View view) {
-        Intent intent = new Intent(this, MenuPrincipalSuperadministradorActivity.class);
+        Intent intent = new Intent(this, MenuPrincipalClienteActivity.class);
         startActivity(intent);
     }
 }

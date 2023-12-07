@@ -50,7 +50,7 @@ public class FormularioRolesActivity extends AppCompatActivity {
                     Toast.makeText(this, "Registro exitoso", Toast.LENGTH_SHORT).show();
 
                     // Después de guardar, ir al menú principal
-                    lanzarVistaMenuPrincipalSuperadmin();
+                    LanzarVistaMenuPrincipal(view);
                 } catch (NumberFormatException e) {
                     // Captura la excepción si hay un error al convertir la cadena a un entero
                     Toast.makeText(this, "El campo ID del formulario no es un número válido", Toast.LENGTH_SHORT).show();
@@ -66,9 +66,8 @@ public class FormularioRolesActivity extends AppCompatActivity {
     }
 
     // Método para ir al menú principal SUPERADMIN
-    private void lanzarVistaMenuPrincipalSuperadmin() {
+    public void LanzarVistaMenuPrincipal(View view) {
         Intent intent = new Intent(this, MenuPrincipalSuperadministradorActivity.class);
         startActivity(intent);
-        finish();  // Opcional: Finaliza la actividad actual si no quieres volver atrás
     }
 }

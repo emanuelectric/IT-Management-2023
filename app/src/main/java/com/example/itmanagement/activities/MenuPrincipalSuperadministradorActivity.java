@@ -36,7 +36,7 @@ public class MenuPrincipalSuperadministradorActivity extends AppCompatActivity {
     }
 
     // Lógica para cerrar sesión con confirmación
-    public void CerrarSesion(View view) {
+    public void cerrarSesion(View view) {
         // Mostrar un diálogo de confirmación
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Cerrar Sesión");
@@ -106,38 +106,65 @@ public class MenuPrincipalSuperadministradorActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Manejar los clics en los elementos del menú desplegable
         int itemId = item.getItemId();
+
+        if (itemId == R.id.item_logout) {
+            // Cerrar sesión
+            cerrarSesion(findViewById(android.R.id.content));
+            return true;
+        }
+
         if (itemId == R.id.ver_usuarios) {
             // Abre el layout correspondiente para "Usuarios-Roles"
             abrirLayoutUsuarios();
-            return true;
         } else if (itemId == R.id.agregar_divisa) {
             // Abre el layout correspondiente para "Divisas"
             abrirLayoutDivisas();
-            return true;
         } else if (itemId == R.id.agregar_pedido) {
-            // Abre el layout correspondiente para "Estados"
-            abrirLayoutEstados();
-            return true;
+            // Abre el layout correspondiente para "Pedidos"
+            abrirLayoutPedidos();
         } else if (itemId == R.id.agregar_resenha) {
             // Abre el layout correspondiente para "Calificaciones"
             abrirLayoutCalificaciones();
-            return true;
         } else if (itemId == R.id.cambiar_contrasenha) {
             // Abre el layout correspondiente para "Cambiar contraseña"
-            abrirLayoutCambiarContraseña();
-            return true;
+            abrirLayoutCambiarContrasenha();
         } else if (itemId == R.id.agregar_rol) {
-            // Abre el layout correspondiente para "Roles"
+            // Abre el layout correspondiente para "Agregar rol"
             abrirLayoutRoles();
-            return true;
         } else if (itemId == R.id.divisas) {
-            // Abre el layout correspondiente para "Roles"
+            // Abre el layout correspondiente para "Divisas"
             abrirLayoutVerDivisas();
-            return true;
+        } else if (itemId == R.id.agregar_producto) {
+            // Abre el layout correspondiente para "Agregar producto"
+            abrirLayoutVerAgregarProducto();
+        } else if (itemId == R.id.productos) {
+            // Abre el layout correspondiente para "Productos"
+            abrirLayoutVerProductos();
+        } else if (itemId == R.id.agregar_categoria_producto) {
+            // Abre el layout correspondiente para "Agregar Categoria de Productos"
+            abrirLayoutAgregarCategoriaProducto();
+        } else if (itemId == R.id.agregar_tipo_pedido) {
+            // Abre el layout correspondiente para "Agregar Tipo de Pedido"
+            abrirLayoutAgregarTipoPedido();
+        } else if (itemId == R.id.agregar_estado_pedido) {
+            // Abre el layout correspondiente para "Agregar Estado de Pedido"
+            abrirLayoutAgregarEstadoPedido();
+        } else if (itemId == R.id.categorias_producto) {
+            // Abre el layout correspondiente para "Categorias de producto"
+            abrirLayoutVerCategoriasProducto();
+        } else if (itemId == R.id.tipos_pedido) {
+            // Abre el layout correspondiente para "Tipos de pedido"
+            abrirLayoutVerTiposPedido();
+        } else if (itemId == R.id.estados_pedido) {
+            // Abre el layout correspondiente para "Estados de pedido"
+            abrirLayoutVerEstadosPedido();
         } else {
             return super.onOptionsItemSelected(item);
         }
+
+        return true;
     }
+
 
 
     // Métodos para abrir los layouts correspondientes
@@ -153,7 +180,7 @@ public class MenuPrincipalSuperadministradorActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void abrirLayoutEstados() {
+    private void abrirLayoutPedidos() {
         // Lógica para abrir el layout de Estados
         Intent intent = new Intent(this, FormularioPedidosActivity.class);
         startActivity(intent);
@@ -165,7 +192,7 @@ public class MenuPrincipalSuperadministradorActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void abrirLayoutCambiarContraseña() {
+    private void abrirLayoutCambiarContrasenha() {
         // Lógica para abrir el layout de Cambiar Contraseña
         Intent intent = new Intent(this, FormularioCambiarContrasenha01Activity.class);
         startActivity(intent);
@@ -178,9 +205,59 @@ public class MenuPrincipalSuperadministradorActivity extends AppCompatActivity {
     }
 
     private void abrirLayoutVerDivisas() {
-        // Lógica para abrir el layout de Cambiar Contraseña
+        // Lógica para abrir el layout para ver la lista de Divisas
         Intent intent = new Intent(this, ListaDivisasActivity.class);
         startActivity(intent);
     }
 
+    private void abrirLayoutVerAgregarProducto() {
+        // Lógica para abrir el layout para Agregar Productos
+        Intent intent = new Intent(this, FormularioProductosActivity.class);
+        startActivity(intent);
+    }
+
+
+    private void abrirLayoutVerProductos() {
+        // Lógica para abrir el layout para ver la lista de Productos
+        Intent intent = new Intent(this, ListaProductosActivity.class);
+        startActivity(intent);
+    }
+
+    private void abrirLayoutAgregarCategoriaProducto() {
+        // Lógica para abrir el layout para ver la lista de Productos
+        Intent intent = new Intent(this, FormularioCategoriaProductoActivity.class);
+        startActivity(intent);
+    }
+
+    private void abrirLayoutAgregarTipoPedido() {
+        // Lógica para abrir el layout para ver la lista de Productos
+        Intent intent = new Intent(this, FormularioTipoPedidoActivity.class);
+        startActivity(intent);
+    }
+
+    private void abrirLayoutAgregarEstadoPedido() {
+        // Lógica para abrir el layout para ver la lista de Productos
+        Intent intent = new Intent(this, FormularioEstadoPedidoActivity.class);
+        startActivity(intent);
+    }
+
+    private void abrirLayoutVerCategoriasProducto() {
+        // Lógica para abrir el layout para ver la lista de Categorías de Producto
+        Intent intent = new Intent(this, ListaCategoriasProductoActivity.class);
+        startActivity(intent);
+    }
+
+    private void abrirLayoutVerTiposPedido() {
+        // Lógica para abrir el layout para ver la lista de Tipos de Pedido
+        Intent intent = new Intent(this, ListaTiposPedidoActivity.class);
+        startActivity(intent);
+    }
+
+    private void abrirLayoutVerEstadosPedido() {
+        // Lógica para abrir el layout para ver la lista de Estados de Pedido
+        Intent intent = new Intent(this, ListaEstadosPedidoActivity.class);
+        startActivity(intent);
+    }
+
 }
+
