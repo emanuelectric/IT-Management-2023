@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="43dp"
+        android:layout_height="35dp"
+        app:srcCompat="@drawable/arrows"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"
+        android:clickable="true"
+        android:onClick="LanzarVistaMenuPrincipal" />
+
+    <TextView
+        android:id="@+id/textView_Perfil"
+        android:layout_width="321dp"
+        android:layout_height="46dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="30dp"
+        android:text="Perfil"
+        android:textSize="25dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView_Perfil"
+        android:layout_marginTop="20dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/imageViewPerfil"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_below="@+id/textView_Perfil"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/ic_person" />
+
+            <TextView
+                android:id="@+id/textViewNombre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imageViewPerfil"
+                android:layout_marginTop="17dp"
+                android:text="Nombre"
+                android:textSize="18sp"
+                android:textColor="@color/dark_grey"/>
+
+            <TextView
+                android:id="@+id/textViewNombreUsuario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textViewNombre"
+                android:text="NOMBRE USUARIO"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/textViewCorreo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textViewNombreUsuario"
+                android:layout_marginTop="20dp"
+                android:text="Correo electrónico"
+                android:textSize="18sp"
+                android:textColor="@color/dark_grey"/>
+
+            <TextView
+                android:id="@+id/textViewCorreoUsuario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textViewCorreo"
+                android:text="CORREO USUARIO"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/textViewTelefono"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textViewCorreoUsuario"
+                android:layout_marginTop="20dp"
+                android:text="Número de teléfono"
+                android:textSize="18sp"
+                android:textColor="@color/dark_grey"/>
+
+            <TextView
+                android:id="@+id/textViewTelefonoUsuario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textViewTelefono"
+                android:text="TELEFONO USUARIO"
+                android:textSize="25sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/textViewTelefonoUsuario"
+                android:layout_marginTop="10dp"
+                android:background="#CCCCCC" />
+
+            <Space
+                android:id="@+id/space"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@+id/textViewTelefonoUsuario"/>
+
+
+            <TextView
+                android:id="@+id/textViewAjustes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/space"
+                android:layout_marginTop="20dp"
+                android:text="Ajustes de usuario"
+                android:textSize="30sp"
+                android:layout_marginLeft="60dp"
+                android:textColor="@color/black"/>
+
+
+            <Button
+                android:id="@+id/botonCambiarNombre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textViewAjustes"
+                android:layout_marginTop="10dp"
+                android:text="Cambiar nombre"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:background="@drawable/boton_redondeado_rojo" />
+
+            <Button
+                android:id="@+id/botonCambiarCorreo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/botonCambiarNombre"
+                android:layout_marginTop="10dp"
+                android:text="Cambiar correo electrónico"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:background="@drawable/boton_redondeado_rojo"
+                />
+
+            <Button
+                android:id="@+id/botonCambiarTelefono"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/botonCambiarCorreo"
+                android:layout_marginTop="10dp"
+                android:text="Cambiar número de teléfono"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:background="@drawable/boton_redondeado_rojo"
+                />
+
+            <Button
+                android:id="@+id/botonCambiarContrasenha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/botonCambiarTelefono"
+                android:layout_marginTop="10dp"
+                android:text="Cambiar contraseña"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:background="@drawable/boton_redondeado_rojo"
+                />
+
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

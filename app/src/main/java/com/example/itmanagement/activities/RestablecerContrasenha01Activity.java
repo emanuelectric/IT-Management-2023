@@ -19,7 +19,7 @@ public class RestablecerContrasenha01Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.formulario_restablecer_contrasenha_01_layout);
+        setContentView(R.layout.restablecer_contrasenha_01);
 
         dbHelper = new DBHelper(this);
         editTextRecuperarContrasenaCorreoElectronico = findViewById(R.id.edittext_recuperarContrasenha_correoElectronico);
@@ -46,45 +46,9 @@ public class RestablecerContrasenha01Activity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        // Obtén el tipo de usuario del correo electrónico ingresado
-        super.onBackPressed();
-        String email = editTextRecuperarContrasenaCorreoElectronico.getText().toString();
-
-        // Verifica si el campo de correo electrónico no está vacío
-        if (!email.isEmpty()) {
-            int tipoUsuario = dbHelper.obtenerTipoUsuarioPorCorreo(email);
-
-            // Abre la actividad correspondiente basándose en el tipo de usuario
-            abrirActividadSegunTipoUsuario(tipoUsuario);
-        } else {
-            // En caso de correo electrónico vacío, regresa a la pantalla de inicio de sesión sin argumentos
-            abrirActividadSegunTipoUsuario(0);  // Proporciona un valor predeterminado o adecuado según tu lógica
-        }
-    }
-
-    // Método para abrir la actividad según el tipo de usuario
-    private void abrirActividadSegunTipoUsuario(int tipoUsuario) {
-        Intent intent;
-
-        switch (tipoUsuario) {
-            case 1:
-                intent = new Intent(this, MenuPrincipalSuperadministradorActivity.class);
-                break;
-            case 3:
-                intent = new Intent(this, MenuPrincipalAdministradorActivity.class);
-                break;
-            case 4:
-                intent = new Intent(this, MenuPrincipalClienteActivity.class);
-                break;
-            default:
-                intent = new Intent(this, MenuPrincipalClienteActivity.class);
-                break;
-        }
-
-        // Inicia la nueva actividad y finaliza la actual si no se desea volver atrás
+    // Retroceder, pantalla Iniciar Sesion
+    public void LanzarVistaIniciarSesion(View view) {
+        Intent intent = new Intent(this, IniciarSesionActivity.class);
         startActivity(intent);
-        finish();
     }
 }

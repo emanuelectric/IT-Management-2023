@@ -123,8 +123,9 @@ public class ListaDivisasActivity extends AppCompatActivity {
 
 
 
-    public void LanzarVistaMenuPrincipal(View view) {
-        Intent intent = new Intent(this, MenuPrincipalSuperadministradorActivity.class);
+    // Método para ir atrás, Administrar Contenido
+    public void lanzarVistaAdministrarContenido(View view) {
+        Intent intent = new Intent(this, AdministrarContenidoActivity.class);
         startActivity(intent);
     }
 

@@ -14,7 +14,7 @@
         android:layout_marginTop="30dp"
         android:layout_marginLeft="10dp"
         android:clickable="true"
-        android:onClick="LanzarVistaMenuPrincipal" />
+        android:onClick="lanzarVistaPerfil" />
 
     <TextView
         android:id="@+id/textView"
@@ -61,7 +61,7 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/imageView16"
         android:layout_marginTop="20dp"
-        android:onClick="siguienteRestablecerContrasena"
+        android:onClick="siguienteRestablecerContrasenha"
         android:textColor="#FFFFFF"
         android:text="Siguiente"
         android:textSize="16sp"

@@ -124,10 +124,6 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity {
             // Abre el layout correspondiente para "Cambiar contraseña"
             abrirLayoutCambiarContraseña();
             return true;
-        } else if (itemId == R.id.agregar_rol) {
-            // Abre el layout correspondiente para "Roles"
-            abrirLayoutRoles();
-            return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
@@ -167,7 +163,7 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity {
 
     private void abrirLayoutRoles() {
         // Lógica para abrir el layout de Cambiar Contraseña
-        Intent intent = new Intent(this, FormularioRolesActivity.class);
+        Intent intent = new Intent(this, FormularioTiposUsuarioActivity.class);
         startActivity(intent);
     }
 

@@ -115,7 +115,7 @@ public class RegistrarseActivity extends AppCompatActivity{
 
     // Función para validar el formato del número de teléfono
     private boolean isValidPhoneNumber(String phoneNumber) {
-        // Verificar que tenga 10 dígitos y empiece con 0
+        // Verificar que tenga 10 dígitos
         return phoneNumber.matches("0[0-9]{9}");
     }
 

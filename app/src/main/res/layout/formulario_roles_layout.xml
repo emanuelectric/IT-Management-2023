@@ -40,13 +40,6 @@
         android:layout_marginTop="270dp"
         app:srcCompat="@drawable/bloque_texto" />
 
-    <ImageView
-        android:id="@+id/imageView17"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="350dp"
-        app:srcCompat="@drawable/bloque_texto" />
-
     <EditText
         android:id="@+id/edittext_nombre_tipoUsuario"
         android:layout_width="302dp"
@@ -69,24 +62,13 @@
         android:textColor="@color/dark_grey"
         android:hint="Descripción" />
 
-    <EditText
-        android:id="@+id/edittext_id_formulario"
-        android:layout_width="306dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="55dp"
-        android:layout_marginTop="365dp"
-        android:ems="10"
-        android:inputType="number"
-        android:textColor="@color/dark_grey"
-        android:hint="ID del formulario" />
-
 
     <Button
         android:id="@+id/boton_guardarTipoUsuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/imageView17"
+        android:layout_below="@+id/imageView16"
         android:layout_marginTop="20dp"
         android:onClick="guardarTipoUsuario"
         android:textColor="#FFFFFF"

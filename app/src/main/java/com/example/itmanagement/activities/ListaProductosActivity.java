@@ -65,9 +65,9 @@ public class ListaProductosActivity extends AppCompatActivity {
         Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();
     }
 
-    // Método para ir a la pantalla principal
-    public void LanzarVistaMenuPrincipal(View view) {
-        Intent intent = new Intent(this, MenuPrincipalSuperadministradorActivity.class);
+    // Método para ir atrás, Administrar Contenido
+    public void lanzarVistaAdministrarContenido(View view) {
+        Intent intent = new Intent(this, AdministrarContenidoActivity.class);
         startActivity(intent);
     }
 

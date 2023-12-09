@@ -18,7 +18,7 @@
 
         <!-- Actividad principal al iniciar -->
     <activity
-        android:name=".activities.MainActivity"
+        android:name=".activities.FlashActivity"
         android:exported="true">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
@@ -26,10 +26,17 @@
         </intent-filter>
     </activity>
 
+
         <!-- Inicio -->
         <activity android:name=".activities.MenuInicialActivity" />
         <activity android:name=".activities.IniciarSesionActivity" />
         <activity android:name=".activities.RegistrarseActivity" />
+
+
+
+
+
+
 
         <!-- Inicio -->
         <activity android:name=".activities.RestablecerContrasenha01Activity" />
@@ -39,13 +46,19 @@
         <activity android:name=".activities.MenuPrincipalClienteActivity" />
 
 
+        <!-- Elementos de menus -->
+        <activity android:name=".activities.AdministrarContenidoActivity" />
+        <activity android:name=".activities.InformesAdministradorActivity" />
+        <activity android:name=".activities.PerfilActivity" />
+
+
         <!-- Formularios -->
         <activity android:name=".activities.FormularioCambiarContrasenha01Activity" />
         <activity android:name=".activities.FormularioCambiarContrasenha02Activity" />
         <activity android:name=".activities.FormularioDivisasActivity" />
         <activity android:name=".activities.FormularioPedidosActivity" />
         <activity android:name=".activities.FormularioResenhasActivity" />
-        <activity android:name=".activities.FormularioRolesActivity" />
+        <activity android:name=".activities.FormularioTiposUsuarioActivity" />
         <activity android:name=".activities.FormularioProductosActivity" />
         <activity android:name=".activities.FormularioCategoriaProductoActivity" />
         <activity android:name=".activities.FormularioTipoPedidoActivity" />
@@ -58,10 +71,14 @@
         <activity android:name=".activities.ListaProductosActivity" />
         <activity android:name=".activities.ListaTiposPedidoActivity" />
         <activity android:name=".activities.ListaUsuariosActivity" />
+        <activity android:name=".activities.ListaTiposUsuarioActivity" />
+        <activity android:name=".activities.ListaInventarioActivity" />
+        <activity android:name=".activities.ListaResenhasActivity" />
+        <activity android:name=".activities.ListaPedidosActivity" />
 
 
-        <!-- Otros -->
 
+        <!-- Ediciones -->
         <activity android:name=".activities.EditarDivisaActivity" />
         <activity android:name=".activities.EditarProductoActivity" />
 

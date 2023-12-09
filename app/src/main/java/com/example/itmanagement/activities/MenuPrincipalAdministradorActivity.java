@@ -1,6 +1,5 @@
 package com.example.itmanagement.activities;
 
-import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -98,8 +97,6 @@ public class MenuPrincipalAdministradorActivity extends AppCompatActivity {
 
 
 
-    // Menu Desplegable
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_desplegable_administrador_layout, menu);
@@ -110,71 +107,51 @@ public class MenuPrincipalAdministradorActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Manejar los clics en los elementos del menú desplegable
         int itemId = item.getItemId();
-        if (itemId == R.id.ver_usuarios) {
-            // Abre el layout correspondiente para "Usuarios-Roles"
-            abrirLayoutUsuarios();
+        if (itemId == R.id.nav_administrar_roles) {
+            // Abre el layout correspondiente para "Administrar roles"
+            abrirLayoutAdministrarRoles();
             return true;
-        } else if (itemId == R.id.agregar_divisa) {
-            // Abre el layout correspondiente para "Divisas"
-            abrirLayoutDivisas();
+        } else if (itemId == R.id.nav_administrar_contenido) {
+            // Abre el layout correspondiente para "Administrar contenido"
+            abrirLayoutAdministrarContenido();
             return true;
-        } else if (itemId == R.id.agregar_pedido) {
-            // Abre el layout correspondiente para "Estados"
-            abrirLayoutPedidos();
+        } else if (itemId == R.id.nav_informes) {
+            // Abre el layout correspondiente para "Informes"
+            abrirLayoutInformes();
             return true;
-        } else if (itemId == R.id.agregar_resenha) {
-            // Abre el layout correspondiente para "Calificaciones"
-            abrirLayoutCalificaciones();
-            return true;
-        } else if (itemId == R.id.cambiar_contrasenha) {
-            // Abre el layout correspondiente para "Cambiar contraseña"
-            abrirLayoutCambiarContraseña();
-            return true;
-        } else if (itemId == R.id.agregar_rol) {
-            // Abre el layout correspondiente para "Roles"
-            abrirLayoutRoles();
+        } else if (itemId == R.id.nav_perfil) {
+            // Abre el layout correspondiente para "Perfil"
+            abrirLayoutPerfil();
             return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
     }
 
-
     // Métodos para abrir los layouts correspondientes
-    private void abrirLayoutUsuarios() {
-        // Lógica para abrir el layout de Roles
+    private void abrirLayoutAdministrarRoles() {
+        // Lógica para abrir el layout de "Administrar roles"
         Intent intent = new Intent(this, ListaUsuariosActivity.class);
         startActivity(intent);
     }
 
-    private void abrirLayoutDivisas() {
-        // Lógica para abrir el layout de Divisas
-        Intent intent = new Intent(this, FormularioDivisasActivity.class);
+    private void abrirLayoutAdministrarContenido() {
+        // Lógica para abrir el layout de "Administrar contenido"
+        Intent intent = new Intent(this, ListaUsuariosActivity.class);
         startActivity(intent);
     }
 
-    private void abrirLayoutPedidos() {
-        // Lógica para abrir el layout de Estados
-        Intent intent = new Intent(this, FormularioPedidosActivity.class);
+    private void abrirLayoutInformes() {
+        // Lógica para abrir el layout de "Informes"
+        Intent intent = new Intent(this, ListaUsuariosActivity.class);
         startActivity(intent);
     }
 
-    private void abrirLayoutCalificaciones() {
-        // Lógica para abrir el layout de Calificaciones
-        Intent intent = new Intent(this, FormularioResenhasActivity.class);
+    private void abrirLayoutPerfil() {
+        // Lógica para abrir el layout de "Perfil"
+        Intent intent = new Intent(this, ListaUsuariosActivity.class);
         startActivity(intent);
     }
 
-    private void abrirLayoutCambiarContraseña() {
-        // Lógica para abrir el layout de Cambiar Contraseña
-        Intent intent = new Intent(this, FormularioCambiarContrasenha01Activity.class);
-        startActivity(intent);
-    }
-
-    private void abrirLayoutRoles() {
-        // Lógica para abrir el layout de Roles
-        Intent intent = new Intent(this, FormularioRolesActivity.class);
-        startActivity(intent);
-    }
 
 }

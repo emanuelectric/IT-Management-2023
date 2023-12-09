@@ -19,7 +19,7 @@ public class FormularioCambiarContrasenha01Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.formulario_restablecer_contrasenha_01_layout);
+        setContentView(R.layout.formulario_cambiar_contrasenha_01_layout);
 
         // Inicializar la instancia de DBHelper
         dbHelper = new DBHelper(this);
@@ -35,7 +35,7 @@ public class FormularioCambiarContrasenha01Activity extends AppCompatActivity {
             // Utilizar la instancia de DBHelper para verificar el correo en la base de datos
             if (dbHelper.comprobarCorreo(correo)) {
                 // El correo está en la base de datos, iniciar la siguiente actividad
-                Intent intent = new Intent(this, RestablecerContrasenha02Activity.class);
+                Intent intent = new Intent(this, FormularioCambiarContrasenha02Activity.class);
                 intent.putExtra("correo", correo);
                 startActivity(intent);
             } else {
@@ -48,9 +48,9 @@ public class FormularioCambiarContrasenha01Activity extends AppCompatActivity {
         }
     }
 
-    // Método para ir a la pantalla inicial
-    public void LanzarVistaMenuPrincipal(View view) {
-        Intent intent = new Intent(this, MenuPrincipalSuperadministradorActivity.class);
+    // Método para ir atrás, al PERFIL
+    public void lanzarVistaPerfil(View view) {
+        Intent intent = new Intent(this, PerfilActivity.class);
         startActivity(intent);
     }
 }

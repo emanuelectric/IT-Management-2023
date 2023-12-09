@@ -10,10 +10,9 @@ public class TipoUsuario {
     private String auditFechaModif;
 
     // Constructor sin atributos de auditoría
-    public TipoUsuario(String nombreTipoUsuario, String descripcionTipoUsuario, int idFormularioPermiso) {
+    public TipoUsuario(String nombreTipoUsuario, String descripcionTipoUsuario) {
         this.nombreTipoUsuario = nombreTipoUsuario;
         this.descripcionTipoUsuario = descripcionTipoUsuario;
-        this.idFormularioPermiso = idFormularioPermiso;
     }
 
     // Constructor con atributos de auditoría
@@ -21,7 +20,6 @@ public class TipoUsuario {
         this.idTipoUsuario = idTipoUsuario;
         this.nombreTipoUsuario = nombreTipoUsuario;
         this.descripcionTipoUsuario = descripcionTipoUsuario;
-        this.idFormularioPermiso = idFormularioPermiso;
         this.auditFechaInsert = auditFechaInsert;
         this.auditUsuarioModif = auditUsuarioModif;
         this.auditFechaModif = auditFechaModif;
@@ -83,8 +81,6 @@ public class TipoUsuario {
     public void setAuditFechaModif(String auditFechaModif) {
         this.auditFechaModif = auditFechaModif;
     }
-
-    // Metodos
 
 
 }

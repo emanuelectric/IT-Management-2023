@@ -10,6 +10,7 @@ public class Usuario {
     private String auditFechaInsert;
     private String auditUsuarioModif;
     private String auditFechaModif;
+    private int esAdministrador;
 
     // Constructor con todos los atributos
     public Usuario(int idUsuario, String nombreUsuario, int telefonoUsuario, int idTipoUsuario,
@@ -37,7 +38,7 @@ public class Usuario {
         this.contrasenhaUsuario = contrasenhaUsuario;
     }
 
-    // Constructor que toma nombre, correo y teléfono
+    // Constructor que toma nombre, correo, si es admin, y teléfono
     public Usuario(String nombre, String correo, String telefono) {
         this.nombreUsuario = nombre;
         this.correoElectronico = correo;

@@ -25,7 +25,7 @@ public class FormularioCambiarContrasenha02Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.cambiar_contrasenha_02);
+        setContentView(R.layout.formulario_cambiar_contrasenha_02_layout);
 
         // Inicializar dbHelper
         dbHelper = new DBHelper(this);
@@ -62,8 +62,8 @@ public class FormularioCambiarContrasenha02Activity extends AppCompatActivity {
                 // Muestra un mensaje de éxito
                 Toast.makeText(this, "Contraseña restablecida exitosamente", Toast.LENGTH_SHORT).show();
 
-                // Después de restablecer la contraseña con éxito, llamar a LanzarVistaFormularioCambiarContrasenha01
-                LanzarVistaFormularioCambiarContrasenha01();
+                // Después de restablecer la contraseña con éxito, llamar a LanzarVistaPerfil
+                LanzarVistaPerfil();
             } else {
                 // Contraseñas no coinciden, mostrar Toast
                 Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
@@ -74,8 +74,14 @@ public class FormularioCambiarContrasenha02Activity extends AppCompatActivity {
         }
     }
 
+    // Método para ir al perfil luego de actualizar la contraseña
+    public void LanzarVistaPerfil() {
+        Intent intent = new Intent(this, PerfilActivity.class);
+        startActivity(intent);
+    }
+
     // Método para ir a la pantalla anterior
-    public void LanzarVistaFormularioCambiarContrasenha01() {
+    public void LanzarVistaFormularioCambiarContrasenha01(View view) {
         Intent intent = new Intent(this, FormularioCambiarContrasenha01Activity.class);
         startActivity(intent);
     }

@@ -8,11 +8,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.itmanagement.R;
 import com.example.itmanagement.data.DBHelper;
 
-public class MainActivity extends AppCompatActivity {
+public class FlashActivity extends AppCompatActivity {
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.main_layout);
+            setContentView(R.layout.flash_layout);
 
             initializeApp();
         }
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Intent intent = new Intent(MainActivity.this, MenuInicialActivity.class);
+                    Intent intent = new Intent(FlashActivity.this, MenuInicialActivity.class);
                     startActivity(intent);
                     finish(); // Finish MainActivity
                 }

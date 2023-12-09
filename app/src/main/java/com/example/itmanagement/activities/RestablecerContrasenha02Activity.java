@@ -25,7 +25,7 @@ public class RestablecerContrasenha02Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.cambiar_contrasenha_02);
+        setContentView(R.layout.restablecer_contrasenha_02);
 
         // Inicializar dbHelper
         dbHelper = new DBHelper(this);

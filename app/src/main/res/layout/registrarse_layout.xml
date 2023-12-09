@@ -76,7 +76,7 @@
         android:layout_marginLeft="55dp"
         android:layout_marginTop="205dp"
         android:ems="10"
-        android:hint="Correo Electrónico"
+        android:hint="Correo Electrónico (Ej: op@tie.com)"
         android:textColor="@color/dark_grey"
         android:inputType="textEmailAddress" />
 
@@ -89,7 +89,7 @@
         android:ems="10"
         android:inputType="text"
         android:textColor="@color/dark_grey"
-        android:hint="Nombre y apellido" />
+        android:hint="Nombre" />
 
     <EditText
         android:id="@+id/edittext_registrarse_telfono"
@@ -100,7 +100,7 @@
         android:ems="10"
         android:inputType="number"
         android:textColor="@color/dark_grey"
-        android:hint="Telefono" />
+        android:hint="Telefono (Ej: 0971933009)" />
 
     <EditText
         android:id="@+id/edittext_registrarse_contrasenha"

@@ -23,7 +23,7 @@
         android:layout_height="45dp"
         android:layout_marginLeft="60dp"
         android:layout_marginTop="30dp"
-        android:text="Usuarios y roles"
+        android:text="Administrar roles"
         android:textSize="25dp" />
 
     <ListView

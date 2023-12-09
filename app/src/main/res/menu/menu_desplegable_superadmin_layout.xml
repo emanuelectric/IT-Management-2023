@@ -1,78 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/nav_administrar_roles"
+        android:title="Administrar roles"
+        android:icon="@drawable/ic_divisa" />
 
+    <item
+        android:id="@+id/nav_administrar_contenido"
+        android:title="Administrar contenido"
+        android:icon="@drawable/ic_divisa" />
 
     <item
-        android:id="@+id/ver_usuarios"
-        android:title="Ver Usuarios"
-        app:showAsAction="never"
-        />
+        android:id="@+id/nav_informes"
+        android:title="Informes"
+        android:icon="@drawable/ic_divisa" />
+
     <item
-        android:id="@+id/agregar_divisa"
-        android:title="Agregar Divisa"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/cambiar_contrasenha"
-        android:title="Cambiar Contraseña"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/agregar_rol"
-        android:title="Agregar Rol"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/divisas"
-        android:title="Divisas"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/agregar_producto"
-        android:title="Agregar Producto"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/productos"
-        android:title="Productos"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/agregar_categoria_producto"
-        android:title="Agregar Categoria de Productos"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/agregar_tipo_pedido"
-        android:title="Agregar Tipo de Pedido"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/agregar_estado_pedido"
-        android:title="Agregar Estado de Pedido"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/categorias_producto"
-        android:title="Categorías de Producto"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/tipos_pedido"
-        android:title="Tipos de Pedido"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/estados_pedido"
-        android:title="Estados de Pedido"
-        app:showAsAction="never"
-        />
+        android:id="@+id/nav_perfil"
+        android:title="Perfil"
+        android:icon="@drawable/ic_divisa" />
 
     <item
         android:id="@+id/item_logout"
-        android:title="@+id/title_logout"
+        android:title="Cerrar Sesión"
         android:icon="@drawable/ic_logout"
-        android:orderInCategory="10"
         app:showAsAction="always" />
 </menu>
