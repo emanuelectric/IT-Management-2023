@@ -25,43 +25,20 @@ public class MenuPrincipalAdministradorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_principal_administrador_layout);
 
+        // Configura y muestra la bienvenida
+        setupWelcomeMessage();
+    }
+
+    private void setupWelcomeMessage() {
         // Inicializar vistas
         textViewBienvenida = findViewById(R.id.textViewBienvenida);
 
-        // Obtener nombre de usuario (reemplaza "UsuarioEjemplo" con la lógica para obtener el nombre)
-         String nombreUsuario = obtenerNombreUsuario();
+        // Obtener nombre de usuario (reemplaza "UsuarioEjemplo" con tu lógica para obtener el nombre)
+        String nombreUsuario = obtenerNombreUsuario();
         // Mostrar mensaje de bienvenida
-         textViewBienvenida.setText("¡ Bienvenido " + nombreUsuario + "!");
+        textViewBienvenida.setText("¡Bienvenido " + nombreUsuario + "!");
     }
 
-    // Lógica para cerrar sesión con confirmación
-    public void CerrarSesion(View view) {
-        // Mostrar un diálogo de confirmación
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Cerrar Sesión");
-        builder.setMessage("¿Estás seguro de que quieres cerrar sesión?");
-        builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Implementar aquí la lógica para cerrar sesión
-                DBHelper.setUsuarioLogueado(-1); // Indicar que no hay usuario autenticado
-
-                // Por ahora, simplemente regresamos a la pantalla de inicio de sesión
-                Intent intent = new Intent(MenuPrincipalAdministradorActivity.this, MenuInicialActivity.class);
-                startActivity(intent);
-                finish(); // Asegura que no puedas volver atrás con el botón de retorno
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // No hacemos nada si el usuario elige no cerrar sesión
-            }
-        });
-        builder.show();
-    }
-
-    // Método para obtener el nombre de usuario
     private String obtenerNombreUsuario() {
         long usuarioID = DBHelper.getUsuarioLogueado();
 
@@ -92,10 +69,26 @@ public class MenuPrincipalAdministradorActivity extends AppCompatActivity {
         return " ";
     }
 
-
-
-
-
+    public void cerrarSesion(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Cerrar Sesión");
+        builder.setMessage("¿Estás seguro de que quieres cerrar sesión?");
+        builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                DBHelper.setUsuarioLogueado(-1);
+                Intent intent = new Intent(MenuPrincipalAdministradorActivity.this, MenuInicialActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.show();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -103,55 +96,45 @@ public class MenuPrincipalAdministradorActivity extends AppCompatActivity {
         return true;
     }
 
+    // menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Manejar los clics en los elementos del menú desplegable
         int itemId = item.getItemId();
-        if (itemId == R.id.nav_administrar_roles) {
-            // Abre el layout correspondiente para "Administrar roles"
-            abrirLayoutAdministrarRoles();
+
+        if (itemId == R.id.item_logout) {
+            cerrarSesion(findViewById(android.R.id.content));
             return true;
-        } else if (itemId == R.id.nav_administrar_contenido) {
-            // Abre el layout correspondiente para "Administrar contenido"
-            abrirLayoutAdministrarContenido();
-            return true;
+        }
+
+        // Agregado: Si se llega aquí, significa que no es el ítem de cierre de sesión, así que
+        // verifica otros elementos del menú.
+        if (itemId == R.id.nav_administrar_contenido) {
+            abrirLayoutContenido();
         } else if (itemId == R.id.nav_informes) {
-            // Abre el layout correspondiente para "Informes"
             abrirLayoutInformes();
-            return true;
         } else if (itemId == R.id.nav_perfil) {
-            // Abre el layout correspondiente para "Perfil"
             abrirLayoutPerfil();
-            return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
+
+        return true;
     }
 
     // Métodos para abrir los layouts correspondientes
-    private void abrirLayoutAdministrarRoles() {
-        // Lógica para abrir el layout de "Administrar roles"
-        Intent intent = new Intent(this, ListaUsuariosActivity.class);
-        startActivity(intent);
-    }
 
-    private void abrirLayoutAdministrarContenido() {
-        // Lógica para abrir el layout de "Administrar contenido"
-        Intent intent = new Intent(this, ListaUsuariosActivity.class);
+    private void abrirLayoutContenido() {
+        Intent intent = new Intent(this, AdministrarContenidoActivity.class);
         startActivity(intent);
     }
 
     private void abrirLayoutInformes() {
-        // Lógica para abrir el layout de "Informes"
-        Intent intent = new Intent(this, ListaUsuariosActivity.class);
+        Intent intent = new Intent(this, InformesAdministradorActivity.class);
         startActivity(intent);
     }
 
     private void abrirLayoutPerfil() {
-        // Lógica para abrir el layout de "Perfil"
-        Intent intent = new Intent(this, ListaUsuariosActivity.class);
+        Intent intent = new Intent(this, PerfilActivity.class);
         startActivity(intent);
     }
-
-
 }

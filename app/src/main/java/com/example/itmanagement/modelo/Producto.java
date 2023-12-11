@@ -10,15 +10,16 @@ public class Producto {
     private String auditUsuarioModif;
     private String auditFechaModif;
     private String imagenProducto;
+    private int cantidadStock;
 
     // Constructor
     public Producto(String nombreProducto, String descripcionProducto, double precioProducto,
-                    int idCategoriaProducto, String imagenProducto) {
+                    int idCategoriaProducto, int cantidadStock) {
         this.nombreProducto = nombreProducto;
         this.descripcionProducto = descripcionProducto;
         this.precioProducto = precioProducto;
         this.idCategoriaProducto = idCategoriaProducto;
-        this.imagenProducto = imagenProducto;
+        this.cantidadStock = cantidadStock;
     }
 
     // Constructor
@@ -39,6 +40,13 @@ public class Producto {
         this.nombreProducto = nombreProducto;
         this.descripcionProducto = descripcionProducto;
         this.idCategoriaProducto = idCategoriaProducto;
+    }
+    public Producto (String nombreProducto, String descripcionProducto, int precioProducto, int idCategoriaProducto) {
+        this.nombreProducto = nombreProducto;
+        this.descripcionProducto = descripcionProducto;
+        this.precioProducto = precioProducto;
+        this.idCategoriaProducto = idCategoriaProducto;
+
     }
 
 
@@ -108,11 +116,11 @@ public class Producto {
         this.auditFechaModif = auditFechaModif;
     }
 
-    public String getImagenProducto() {
-        return imagenProducto;
+    public int getCantidadStock() {
+        return cantidadStock;
     }
 
-    public void setImagenProducto(String imagenProducto) {
-        this.imagenProducto = imagenProducto;
+    public void setCantidadStock(int cantidadStock) {
+        this.cantidadStock = cantidadStock;
     }
 }

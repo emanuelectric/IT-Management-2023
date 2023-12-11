@@ -100,34 +100,6 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Manejar los clics en los elementos del menú desplegable
-        int itemId = item.getItemId();
-        if (itemId == R.id.ver_usuarios) {
-            // Abre el layout correspondiente para "Usuarios-Roles"
-            abrirLayoutUsuarios();
-            return true;
-        } else if (itemId == R.id.agregar_divisa) {
-            // Abre el layout correspondiente para "Divisas"
-            abrirLayoutDivisas();
-            return true;
-        } else if (itemId == R.id.agregar_pedido) {
-            // Abre el layout correspondiente para "Estados"
-            abrirLayoutEstados();
-            return true;
-        } else if (itemId == R.id.agregar_resenha) {
-            // Abre el layout correspondiente para "Calificaciones"
-            abrirLayoutCalificaciones();
-            return true;
-        } else if (itemId == R.id.cambiar_contrasenha) {
-            // Abre el layout correspondiente para "Cambiar contraseña"
-            abrirLayoutCambiarContraseña();
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
-        }
-    }
 
 
     // Métodos para abrir los layouts correspondientes

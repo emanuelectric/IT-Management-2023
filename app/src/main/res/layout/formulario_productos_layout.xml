@@ -94,15 +94,15 @@
         android:hint="Precio del producto (PYG)" />
 
     <EditText
-        android:id="@+id/edittex_imagenProducto"
+        android:id="@+id/edittext_cantidadStock"
         android:layout_width="299dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="55dp"
         android:layout_marginTop="390dp"
         android:ems="10"
-        android:inputType="text"
+        android:inputType="number"
         android:textColor="@color/dark_grey"
-        android:hint="Link de la imagen" />
+        android:hint="Cantidad en stock" />
 
 
     <TextView

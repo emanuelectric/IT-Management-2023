@@ -1,5 +1,6 @@
 package com.example.itmanagement.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -22,13 +23,14 @@ public class FormularioProductosActivity extends AppCompatActivity {
     private EditText edittextNombreProducto;
     private EditText edittextDescripcionProducto;
     private EditText editTextPrecioProducto;
-    private EditText editTextImagenProducto;
+    private EditText editTextCantidadStock;
     private Spinner spinnerCategoria;
     private Button botonGuardarProducto;
 
     private int idCategoriaProducto = 0; // Supongamos que 0 es el ID por defecto
     private DBHelper dbHelper;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +40,7 @@ public class FormularioProductosActivity extends AppCompatActivity {
         edittextNombreProducto = findViewById(R.id.edittext_nombreProducto);
         edittextDescripcionProducto = findViewById(R.id.edittext_descripcionProducto);
         editTextPrecioProducto = findViewById(R.id.edittext_precioProducto);
-        editTextImagenProducto = findViewById(R.id.edittex_imagenProducto);
+        editTextCantidadStock = findViewById(R.id.edittext_cantidadStock);
         spinnerCategoria = findViewById(R.id.spinnerCategoria);
         botonGuardarProducto = findViewById(R.id.boton_guardarProducto);
 
@@ -87,7 +89,7 @@ public class FormularioProductosActivity extends AppCompatActivity {
         String nombreProducto = edittextNombreProducto.getText().toString();
         String descripcionProducto = edittextDescripcionProducto.getText().toString();
         String precioProductoString = editTextPrecioProducto.getText().toString();
-        String linkImagenProducto = editTextImagenProducto.getText().toString();
+        String cantidadStockString = editTextCantidadStock.getText().toString();
 
         // Verificar que los campos no estén vacíos
         if (!nombreProducto.isEmpty() && !precioProductoString.isEmpty()) {
@@ -96,11 +98,13 @@ public class FormularioProductosActivity extends AppCompatActivity {
                 // Intentar convertir el precioProductoString a un número entero
                 try {
                     int precioProducto = Integer.parseInt(precioProductoString);
+                    int cantidadStock = Integer.parseInt(cantidadStockString);
+
 
                     // Proceder a guardar el producto
                     if (dbHelper.productoNoExiste(nombreProducto)) {
                         // El producto no existe, entonces procedemos a crearlo
-                        dbHelper.crearProducto(nombreProducto, descripcionProducto, precioProducto, linkImagenProducto, idCategoriaProducto);
+                        dbHelper.crearProducto(nombreProducto, descripcionProducto, precioProducto, cantidadStock, idCategoriaProducto);
 
                         // Muestra un Toast indicando que el registro fue exitoso
                         Toast.makeText(this, "Registro exitoso", Toast.LENGTH_SHORT).show();

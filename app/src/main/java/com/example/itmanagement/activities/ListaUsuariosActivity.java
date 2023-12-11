@@ -36,7 +36,7 @@ public class ListaUsuariosActivity extends AppCompatActivity {
         List<Usuario> listaUsuarios = dbHelper.obtenerListaUsuarios();
 
         // Crea un adaptador personalizado para tus usuarios (puedes utilizar tu UsuarioAdapter)
-        UsuarioAdapter usuarioAdapter = new UsuarioAdapter(this, listaUsuarios);
+        UsuarioAdapter usuarioAdapter = new UsuarioAdapter(this, listaUsuarios, dbHelper);
 
         // Asigna el adaptador al ListView
         listViewUsuarios.setAdapter(usuarioAdapter);

@@ -72,7 +72,6 @@
         <activity android:name=".activities.ListaTiposPedidoActivity" />
         <activity android:name=".activities.ListaUsuariosActivity" />
         <activity android:name=".activities.ListaTiposUsuarioActivity" />
-        <activity android:name=".activities.ListaInventarioActivity" />
         <activity android:name=".activities.ListaResenhasActivity" />
         <activity android:name=".activities.ListaPedidosActivity" />
 

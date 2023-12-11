@@ -6,6 +6,14 @@
     android:orientation="horizontal"
     android:padding="16dp">
 
+    <CheckBox
+        android:id="@+id/checkBoxSeleccionar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="16dp"
+        android:buttonTint="@color/dark_grey" />
+
     <ImageView
         android:id="@+id/imageViewAvatar"
         android:layout_width="48dp"
@@ -28,44 +36,38 @@
             android:text="Nombre del producto" />
 
         <TextView
-            android:id="@+id/textViewDescripcionProducto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:text="Descripción del producto" />
-
-        <TextView
             android:id="@+id/textViewNombreCategoriaProducto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:text="Categoría del producto" />
+            android:text="Categoría del producto"
+            android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/textViewCantidadStock"
+            android:id="@+id/textViewPrecioProducto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:text="Stock" />
+            android:text="Precio del producto" />
+
 
     </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/imageButtonEditar"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:background="@android:color/transparent"
-        android:scaleType="fitCenter"
-        android:src="@drawable/ic_edit"
-        android:onClick="irEditarProducto"/>
+    <EditText
+        android:id="@+id/editTextCantidad"
+        android:layout_width="69dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="16dp"
+        android:hint="Cant."
+        android:inputType="number" />
 
     <ImageButton
-        android:id="@+id/imageButton2"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:id="@+id/imageButtonEliminar"
+        android:layout_width="38dp"
+        android:layout_height="33dp"
         android:background="@android:color/transparent"
+        android:onClick="eliminarProducto"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_delete"
-        android:onClick="eliminarProducto"/>
+        android:src="@drawable/ic_delete" />
 
 </LinearLayout>

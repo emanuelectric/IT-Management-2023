@@ -27,12 +27,10 @@
             android:textStyle="bold"
             android:text="Nombre de Usuario" />
 
-        <Switch
-            android:id="@+id/switch2"
+        <Spinner
+            android:id="@+id/spinnerTipoUsuario"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Administrador"
-            android:checked="false"/>
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/textViewCorreoUsuario"

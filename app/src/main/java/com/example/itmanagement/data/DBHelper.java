@@ -34,7 +34,7 @@ public class DBHelper extends SQLiteOpenHelper {
         public final Context context;
         public static final String TAG = "MiDBHelper";
         public static final String DB_NAME = "itmanagementdb.sqlite";
-        public static final int DB_VERSION = 8;
+        public static final int DB_VERSION = 11;
 
         private static long usuarioLogueado;
 
@@ -107,19 +107,11 @@ public class DBHelper extends SQLiteOpenHelper {
             public static final String COLUMN_IMAGEN_PRODUCTO = "imagen_producto";
             public static final String COLUMN_DESCRIPCION_PRODUCTO = "descripcion_producto";
             public static final String COLUMN_PRECIO_PRODUCTO = "precio_producto";
+            public static final String COLUMN_CANTIDAD_STOCK = "cantidad_stock";
             public static final String COLUMN_ID_CATEGORIA_PRODUCTO_PRODUCTO = "id_categoria_producto";
             public static final String COLUMN_AUDIT_FECHA_INSERT_PRODUCTO = "audit_fecha_insert_";
             public static final String COLUMN_AUDIT_USUARIO_MODIF_PRODUCTO = "audit_usuario_modif_";
             public static final String COLUMN_AUDIT_FECHA_MODIF_PRODUCTO = "audit_fecha_modif_";
-
-        // Tabla Inventario
-            public static final String TABLE_INVENTARIO = "Inventario";
-            public static final String COLUMN_ID_INVENTARIO = "id_inventario";
-            public static final String COLUMN_ID_PRODUCTO_INVENTARIO = "id_producto";
-            public static final String COLUMN_CANTIDAD_STOCK_INVENTARIO = "cantidad_stock";
-            public static final String COLUMN_AUDIT_FECHA_INSERT_INVENTARIO = "audit_fecha_insert_";
-            public static final String COLUMN_AUDIT_USUARIO_MODIF_INVENTARIO = "audit_usuario_modif_";
-            public static final String COLUMN_AUDIT_FECHA_MODIF_INVENTARIO = "audit_fecha_modif_";
 
         // Tabla Usuario
             static final String TABLE_USUARIO = "Usuario";
@@ -132,7 +124,6 @@ public class DBHelper extends SQLiteOpenHelper {
             public static final String COLUMN_AUDIT_FECHA_INSERT_USUARIO = "audit_fecha_insert_";
             public static final String COLUMN_AUDIT_USUARIO_MODIF_USUARIO = "audit_usuario_modif_";
             public static final String COLUMN_AUDIT_FECHA_MODIF_USUARIO = "audit_fecha_modif_";
-            public static final String COLUMN_ES_ADMINISTRADOR = "es_administrador";
 
         // Tabla Resenha
             public static final String TABLE_RESENHA = "Resenha";
@@ -152,9 +143,11 @@ public class DBHelper extends SQLiteOpenHelper {
             public static final String COLUMN_FECHA_HORA_PEDIDO = "fecha_hora_pedido";
             public static final String COLUMN_ID_ESTADO_PEDIDO_PEDIDO = "id_estado_pedido";
             public static final String COLUMN_ID_TIPO_PEDIDO_PEDIDO = "id_tipo_pedido";
-            public static final String COLUMN_UBICACION_LATITUD_PEDIDO = "ubicacion_latitud";
-            public static final String COLUMN_UBICACION_LONGITUD_PEDIDO = "ubicacion_longitud";
-            public static final String COLUMN_AUDIT_FECHA_INSERT_PEDIDO = "audit_fecha_insert_";
+            public static final String COLUMN_UBICACION_PEDIDO_PEDIDO = "ubicacion_pedido";
+            public static final String COLUMN_COMENTARIO_PEDIDO_PEDIDO = "comentario_pedido";
+            public static final String COLUMN_COSTO_TOTAL_PEDIDO = "costo_total";
+
+    public static final String COLUMN_AUDIT_FECHA_INSERT_PEDIDO = "audit_fecha_insert_";
             public static final String COLUMN_AUDIT_USUARIO_MODIF_PEDIDO = "audit_usuario_modif_";
             public static final String COLUMN_AUDIT_FECHA_MODIF_PEDIDO = "audit_fecha_modif_";
 
@@ -203,20 +196,19 @@ public class DBHelper extends SQLiteOpenHelper {
                 ")"); */
 
 
-            db.execSQL("CREATE TABLE Usuario (" +
-                    "id_usuario INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "nombre_usuario VARCHAR NOT NULL," +
-                    "telefono_usuario INTEGER NOT NULL," +
-                    "id_tipo_usuario INTEGER," +
-                    "correo_electronico VARCHAR NOT NULL," +
-                    "contrasenha_usuario VARCHAR NOT NULL," +
-                    "es_administrador INTEGER," +
-                    "audit_fecha_insert_ VARCHAR," +
-                    "audit_usuario_modif_ VARCHAR," +
-                    "audit_fecha_modif_ VARCHAR," +
-                    "FOREIGN KEY (id_tipo_usuario) REFERENCES Tipo_Usuario (id_tipo_usuario)" +
-                    ")"
-            );
+        db.execSQL("CREATE TABLE Usuario (" +
+                "id_usuario INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "nombre_usuario VARCHAR NOT NULL," +
+                "telefono_usuario INTEGER NOT NULL," +
+                "id_tipo_usuario INTEGER," +
+                "correo_electronico VARCHAR NOT NULL," +
+                "contrasenha_usuario VARCHAR NOT NULL," +
+                "audit_fecha_insert_ VARCHAR," +
+                "audit_usuario_modif_ VARCHAR," +
+                "audit_fecha_modif_ VARCHAR," +
+                "FOREIGN KEY (id_tipo_usuario) REFERENCES Tipo_Usuario (id_tipo_usuario)" +
+                ")"
+        );
 
         // Tabla Pedido
         /*    db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_PEDIDO + " (" +
@@ -235,22 +227,23 @@ public class DBHelper extends SQLiteOpenHelper {
                     "FOREIGN KEY (" + COLUMN_ID_TIPO_PEDIDO + ") REFERENCES " + TABLE_TIPO_PEDIDO + "(" + COLUMN_ID_TIPO_PEDIDO + ")" +
                     ")"); */
 
-            db.execSQL("CREATE TABLE Pedido (" +
-                    "id_pedido INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "id_usuario INTEGER NOT NULL," +
-                    "fecha_hora_pedido TIMESTAMP NOT NULL," +
-                    "id_estado_pedido VARCHAR NOT NULL," +
-                    "id_tipo_pedido INTEGER NOT NULL," +
-                    "ubicacion_latitud REAL NOT NULL," +
-                    "ubicacion_longitud REAL NOT NULL," +
-                    "audit_fecha_insert_ VARCHAR," +
-                    "audit_usuario_modif_ VARCHAR," +
-                    "audit_fecha_modif_ VARCHAR," +
-                    "FOREIGN KEY (id_usuario) REFERENCES Usuario (id_usuario)," +
-                    "FOREIGN KEY (id_estado_pedido) REFERENCES Estado_Pedido (id_estado_pedido)," +
-                    "FOREIGN KEY (id_tipo_pedido) REFERENCES Tipo_Pedido (id_tipo_pedido)" +
-                    ")"
-            );
+        db.execSQL("CREATE TABLE Pedido (" +
+                "id_pedido INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "id_usuario INTEGER NOT NULL," +
+                "fecha_hora_pedido TIMESTAMP NOT NULL," +
+                "id_estado_pedido VARCHAR NOT NULL," +
+                "id_tipo_pedido INTEGER NOT NULL," +
+                "ubicacion_pedido VARCHAR NOT NULL," +
+                "comentario_pedido VARCHAR," +
+                "costo_total INTEGER," +
+                "audit_fecha_insert_ VARCHAR," +
+                "audit_usuario_modif_ VARCHAR," +
+                "audit_fecha_modif_ VARCHAR," +
+                "FOREIGN KEY (id_usuario) REFERENCES Usuario (id_usuario)," +
+                "FOREIGN KEY (id_estado_pedido) REFERENCES Estado_Pedido (id_estado_pedido)," +
+                "FOREIGN KEY (id_tipo_pedido) REFERENCES Tipo_Pedido (id_tipo_pedido)" +
+                ")"
+        );
 
         // Tabla Producto
         /*    db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_PRODUCTO + " (" +
@@ -268,41 +261,20 @@ public class DBHelper extends SQLiteOpenHelper {
                     "FOREIGN KEY (" + COLUMN_ID_DIVISA + ") REFERENCES " + TABLE_DIVISA + "(" + COLUMN_ID_DIVISA + ")" +
                     ")"); */
 
-            db.execSQL("CREATE TABLE Producto (" +
-                    "id_producto INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "nombre_producto VARCHAR NOT NULL," +
-                    "descripcion_producto VARCHAR NOT NULL," +
-                    "precio_producto NUMERIC(2) NOT NULL," +
-                    "id_categoria_producto VARCHAR NOT NULL," +
-                    "audit_fecha_insert_ VARCHAR," +
-                    "audit_usuario_modif_ VARCHAR," +
-                    "audit_fecha_modif_ VARCHAR," +
-                    "imagen_producto VARCHAR," +
-                    "FOREIGN KEY (id_categoria_producto) REFERENCES Categoria_Producto (id_categoria_producto)" +
-                    ")"
-            );
-
-        // Tabla Inventario
-        /*    db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_INVENTARIO + " (" +
-                    COLUMN_ID_INVENTARIO + " INTEGER PRIMARY KEY, " +
-                    COLUMN_ID_PRODUCTO + " INTEGER NOT NULL, " +
-                    COLUMN_CANTIDAD_STOCK_INVENTARIO + " INTEGER NOT NULL, " +
-                    COLUMN_AUDIT_FECHA_INSERT_INVENTARIO + " VARCHAR, " +
-                    COLUMN_AUDIT_USUARIO_MODIF_INVENTARIO + " VARCHAR, " +
-                    COLUMN_AUDIT_FECHA_MODIF_INVENTARIO + " VARCHAR, " +
-                    "FOREIGN KEY (" + COLUMN_ID_PRODUCTO + ") REFERENCES " + TABLE_PRODUCTO + "(" + COLUMN_ID_PRODUCTO + ")" +
-                    ")"); */
-
-            db.execSQL("CREATE TABLE Inventario (" +
-                    "id_inventario INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "id_producto INTEGER NOT NULL," +
-                    "cantidad_stock INTEGER NOT NULL," +
-                    "audit_fecha_insert_ VARCHAR," +
-                    "audit_usuario_modif_ VARCHAR," +
-                    "audit_fecha_modif_ VARCHAR," +
-                    "FOREIGN KEY (id_producto) REFERENCES Producto (id_producto)" +
-                    ")"
-            );
+        db.execSQL("CREATE TABLE Producto (" +
+                "id_producto INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "nombre_producto VARCHAR NOT NULL," +
+                "descripcion_producto VARCHAR NOT NULL," +
+                "precio_producto NUMERIC(2) NOT NULL," +
+                "id_categoria_producto VARCHAR NOT NULL," +
+                "cantidad_stock INTEGER," +
+                "audit_fecha_insert_ VARCHAR," +
+                "audit_usuario_modif_ VARCHAR," +
+                "audit_fecha_modif_ VARCHAR," +
+                "imagen_producto VARCHAR," +
+                "FOREIGN KEY (id_categoria_producto) REFERENCES Categoria_Producto (id_categoria_producto)" +
+                ")"
+        );
 
         // Tabla Divisa
         /*    db.execSQL("CREATE TABLE " + TABLE_DIVISA + " (" +
@@ -314,15 +286,15 @@ public class DBHelper extends SQLiteOpenHelper {
                     COLUMN_AUDIT_FECHA_MODIF_DIVISA + " VARCHAR" +
                     ")"); */
 
-            db.execSQL("CREATE TABLE Divisa (" +
-                    "id_divisa INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "nombre_divisa VARCHAR NOT NULL," +
-                    "simbolo_divisa VARCHAR NOT NULL," +
-                    "audit_fecha_insert_ VARCHAR," +
-                    "audit_usuario_modif_ VARCHAR," +
-                    "audit_fecha_modif_ VARCHAR" +
-                    ")"
-            );
+        db.execSQL("CREATE TABLE Divisa (" +
+                "id_divisa INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "nombre_divisa VARCHAR NOT NULL," +
+                "simbolo_divisa VARCHAR NOT NULL," +
+                "audit_fecha_insert_ VARCHAR," +
+                "audit_usuario_modif_ VARCHAR," +
+                "audit_fecha_modif_ VARCHAR" +
+                ")"
+        );
 
         // Tabla Resenha
         /*    db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_RESENHA + " (" +
@@ -337,18 +309,18 @@ public class DBHelper extends SQLiteOpenHelper {
                     "FOREIGN KEY (" + COLUMN_ID_USUARIO + ") REFERENCES " + TABLE_USUARIO + "(" + COLUMN_ID_USUARIO + ")" +
                     ")"); */
 
-            db.execSQL("CREATE TABLE Resenha (" +
-                    "id_resenha INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "calificacion VARCHAR NOT NULL," +
-                    "id_usuario INTEGER NOT NULL," +
-                    "comentario VARCHAR NOT NULL," +
-                    "fech_hora TIMESTAMP NOT NULL," +
-                    "audit_fecha_insert_ VARCHAR," +
-                    "audit_usuario_modif_ VARCHAR," +
-                    "audit_fecha_modif_ VARCHAR," +
-                    "FOREIGN KEY (id_usuario) REFERENCES Usuario (id_usuario)" +
-                    ")"
-            );
+        db.execSQL("CREATE TABLE Resenha (" +
+                "id_resenha INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "calificacion VARCHAR NOT NULL," +
+                "id_usuario INTEGER NOT NULL," +
+                "comentario VARCHAR NOT NULL," +
+                "fech_hora TIMESTAMP NOT NULL," +
+                "audit_fecha_insert_ VARCHAR," +
+                "audit_usuario_modif_ VARCHAR," +
+                "audit_fecha_modif_ VARCHAR," +
+                "FOREIGN KEY (id_usuario) REFERENCES Usuario (id_usuario)" +
+                ")"
+        );
 
         // Tabla Tipo_Usuario
         /*    db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_TIPO_USUARIO + " (" +
@@ -362,16 +334,15 @@ public class DBHelper extends SQLiteOpenHelper {
                     "FOREIGN KEY (" + COLUMN_ID_FORMULARIO_PERMISO + ") REFERENCES " + TABLE_FORMULARIO_PERMISO + "(" + COLUMN_ID_FORMULARIO_PERMISO + ")" +
                     ")"); */
 
-            db.execSQL("CREATE TABLE Tipo_Usuario (" +
-                    "id_tipo_usuario INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "nombre_tipo_usuario VARCHAR NOT NULL," +
-                    "descripcion_tipo_usuario VARCHAR NOT NULL," +
-                    "id_formulario_permiso INTEGER NOT NULL," +
-                    "audit_fecha_insert_ VARCHAR," +
-                    "audit_usuario_modif_ VARCHAR," +
-                    "audit_fecha_modif VARCHAR" +
-                    ")"
-            );
+        db.execSQL("CREATE TABLE Tipo_Usuario (" +
+                "id_tipo_usuario INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "nombre_tipo_usuario VARCHAR NOT NULL," +
+                "descripcion_tipo_usuario VARCHAR NOT NULL," +
+                "audit_fecha_insert_ VARCHAR," +
+                "audit_usuario_modif_ VARCHAR," +
+                "audit_fecha_modif VARCHAR" +
+                ")"
+        );
 
         // Tabla Categoria_Producto
         /*    db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_CATEGORIA_PRODUCTO + " (" +
@@ -544,6 +515,73 @@ public class DBHelper extends SQLiteOpenHelper {
                 }
             }
 
+            if (oldVersion < 9) {
+                // Eliminar la tabla Inventario si existe
+                db.execSQL("DROP TABLE IF EXISTS Inventario");
+
+                // Eliminar la columna es_administrador de la tabla Usuario si existe
+                db.execSQL("CREATE TABLE UsuarioTemp AS SELECT * FROM Usuario;");
+                db.execSQL("DROP TABLE IF EXISTS Usuario;");
+                db.execSQL("CREATE TABLE Usuario (" +
+                        "id_usuario INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        "nombre_usuario VARCHAR NOT NULL," +
+                        "telefono_usuario INTEGER NOT NULL," +
+                        "id_tipo_usuario INTEGER," +
+                        "correo_electronico VARCHAR NOT NULL," +
+                        "contrasenha_usuario VARCHAR NOT NULL," +
+                        "audit_fecha_insert_ VARCHAR," +
+                        "audit_usuario_modif_ VARCHAR," +
+                        "audit_fecha_modif_ VARCHAR," +
+                        "FOREIGN KEY (id_tipo_usuario) REFERENCES Tipo_Usuario (id_tipo_usuario)" +
+                        ")");
+                db.execSQL("INSERT INTO Usuario SELECT * FROM UsuarioTemp;");
+                db.execSQL("DROP TABLE IF EXISTS UsuarioTemp;");
+
+                // Agregar la columna cantidad_stock a la tabla Producto si no existe
+                db.execSQL("ALTER TABLE Producto ADD COLUMN cantidad_stock INTEGER;");
+            }
+
+            if (oldVersion < 10) {
+                    // Eliminar la columna id_divisa de la tabla Producto (actualizado)
+                    db.execSQL("CREATE TABLE ProductoTemp AS SELECT id_producto, nombre_producto, descripcion_producto, precio_producto, id_categoria_producto, audit_fecha_insert_, audit_usuario_modif_, audit_fecha_modif_, imagen_producto FROM Producto;");
+                    db.execSQL("DROP TABLE Producto;");
+                    db.execSQL("CREATE TABLE Producto (id_producto INTEGER PRIMARY KEY AUTOINCREMENT, nombre_producto VARCHAR NOT NULL, descripcion_producto VARCHAR NOT NULL, precio_producto NUMERIC(2) NOT NULL, id_categoria_producto VARCHAR NOT NULL, audit_fecha_insert_ VARCHAR, audit_usuario_modif_ VARCHAR, audit_fecha_modif_ VARCHAR, imagen_producto VARCHAR, FOREIGN KEY (id_categoria_producto) REFERENCES Categoria_Producto (id_categoria_producto));");
+                    db.execSQL("INSERT INTO Producto SELECT id_producto, nombre_producto, descripcion_producto, precio_producto, id_categoria_producto, audit_fecha_insert_, audit_usuario_modif_, audit_fecha_modif_, imagen_producto FROM ProductoTemp WHERE 1=0;"); // Asegúrate de que esta línea excluye la columna id_divisa
+                    db.execSQL("DROP TABLE ProductoTemp;");
+            }
+
+            if (oldVersion < 11) {
+                try {
+                    if (oldVersion < 11) {
+                        // Crear una tabla temporal con los atributos necesarios (sin las columnas de auditoría)
+                        db.execSQL("CREATE TABLE IF NOT EXISTS PedidoTemp (" +
+                                "id_pedido INTEGER PRIMARY KEY AUTOINCREMENT," +
+                                "id_usuario INTEGER NOT NULL," +
+                                "fecha_hora_pedido TIMESTAMP NOT NULL," +
+                                "id_estado_pedido VARCHAR NOT NULL," +
+                                "id_tipo_pedido INTEGER NOT NULL," +
+                                "ubicacion_pedido VARCHAR NOT   NULL," +
+                                "comentario_pedido VARCHAR," +
+                                "costo_total INTEGER," +
+                                "FOREIGN KEY (id_usuario) REFERENCES Usuario (id_usuario)," +
+                                "FOREIGN KEY (id_estado_pedido) REFERENCES Estado_Pedido (id_estado_pedido)," +
+                                "FOREIGN KEY (id_tipo_pedido) REFERENCES Tipo_Pedido (id_tipo_pedido)" +
+                                ");");
+
+                        // Eliminar la tabla original
+                        db.execSQL("DROP TABLE IF EXISTS Pedido;");
+
+                        // Cambiar el nombre de la tabla temporal a la original
+                        db.execSQL("ALTER TABLE PedidoTemp RENAME TO Pedido;");
+                    }
+
+                } catch (Exception e) {
+                    Log.e(TAG, "Error durante la actualización de la base de datos", e);
+                }
+            }
+
+
+
         } catch (Exception e) {
             Log.e(TAG, "Error durante la actualización de la base de datos", e);
         }
@@ -587,11 +625,10 @@ public class DBHelper extends SQLiteOpenHelper {
                             COLUMN_CORREO_ELECTRONICO + ", " +
                             COLUMN_TELEFONO_USUARIO + ", " +
                             COLUMN_CONTRASENHA_USUARIO + ", " +
-                            COLUMN_ID_TIPO_USUARIO_USUARIO + ", " +
-                            COLUMN_ES_ADMINISTRADOR + ") VALUES (?, ?, ?, ?, ?, ?)";
+                            COLUMN_ID_TIPO_USUARIO_USUARIO + ") VALUES (?, ?, ?, ?, ?)";
 
-                    // Establecer el tipo de usuario por defecto como 3 (Cliente) y es_administrador como 0 (falso)
-                    database.execSQL(insertQuery, new Object[]{nombreUsuario, correoElectronico, telefonoUsuario, contrasenhaUsuario, 3, 0});
+                    // Establecer el tipo de usuario por defecto como 3 (Cliente)
+                    database.execSQL(insertQuery, new Object[]{nombreUsuario, correoElectronico, telefonoUsuario, contrasenhaUsuario, 3});
 
                     // database.close();
                 }
@@ -671,7 +708,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
         // Crear un Producto con auditoría
-            public void crearProducto(String nombreProducto, String descripcionProducto, int precioProducto, String linkImagenProducto, long idCategoriaProducto) {
+            public void crearProducto(String nombreProducto, String descripcionProducto, int precioProducto, int cantidadStock, long idCategoriaProducto) {
                 SQLiteDatabase database = this.getWritableDatabase();
 
                 try {
@@ -689,7 +726,7 @@ public class DBHelper extends SQLiteOpenHelper {
                         values.put(COLUMN_NOMBRE_PRODUCTO, nombreProducto);
                         values.put(COLUMN_DESCRIPCION_PRODUCTO, descripcionProducto);
                         values.put(COLUMN_PRECIO_PRODUCTO, precioProducto);
-                        values.put(COLUMN_IMAGEN_PRODUCTO, linkImagenProducto);
+                        values.put(COLUMN_CANTIDAD_STOCK, cantidadStock);
                         values.put(COLUMN_ID_CATEGORIA_PRODUCTO, idCategoriaProducto);
 
                         // Obtener la fecha y hora de la última modificación del Producto
@@ -1224,8 +1261,19 @@ public class DBHelper extends SQLiteOpenHelper {
                     }
 
 
+    // Actualizar idTipoUsuario
+    public void actualizarIdTipoUsuario(String correoElectronico, int nuevoIdTipoUsuario) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues valores = new ContentValues();
+        valores.put(COLUMN_ID_TIPO_USUARIO_USUARIO, nuevoIdTipoUsuario);
+        db.update(TABLE_USUARIO, valores, COLUMN_CORREO_ELECTRONICO + " = ?", new String[]{correoElectronico});
+        db.close();
+    }
 
-        // Get Usuario ID
+
+
+
+    // Get Usuario ID
         @SuppressLint("Range")
         public long getUsuarioID(String mail) {
             SQLiteDatabase database = this.getReadableDatabase();
@@ -1270,7 +1318,26 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor.moveToFirst();
 
         return cursor;
+        }
+
+    public int getTipoUsuario(long userId) {
+        SQLiteDatabase database = this.getReadableDatabase();
+        String[] columns = {COLUMN_ID_TIPO_USUARIO_USUARIO};
+        String selection = COLUMN_ID_USUARIO + " = ?";
+        String[] selectionArgs = {String.valueOf(userId)};
+
+        Cursor cursor = database.query(TABLE_USUARIO, columns, selection, selectionArgs, null, null, null);
+
+        int tipoUsuario = -1;
+
+        if (cursor != null && cursor.moveToFirst()) {
+            tipoUsuario = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_TIPO_USUARIO_USUARIO));
+            cursor.close();
+        }
+
+        return tipoUsuario;
     }
+
 
 
 
@@ -1283,21 +1350,29 @@ public class DBHelper extends SQLiteOpenHelper {
                     List<Usuario> usuarios = new ArrayList<>();
 
                     SQLiteDatabase database = this.getReadableDatabase();
+
+                    // Especifica las columnas que deseas recuperar
                     String[] columns = {
                             COLUMN_NOMBRE_USUARIO,
                             COLUMN_CORREO_ELECTRONICO,
-                            COLUMN_TELEFONO_USUARIO
+                            COLUMN_TELEFONO_USUARIO,
+                            COLUMN_ID_TIPO_USUARIO_USUARIO  // Agregamos la columna de id_tipo_usuario
                     };
 
-                    Cursor cursor = database.query(TABLE_USUARIO, columns, null, null, null, null, null);
+                    // Ordena los resultados por id_tipo_usuario
+                    String sortOrder = COLUMN_ID_TIPO_USUARIO_USUARIO + " ASC";
+
+                    Cursor cursor = database.query(TABLE_USUARIO, columns, null, null, null, null, sortOrder);
 
                     try {
                         while (cursor.moveToNext()) {
                             String nombre = cursor.getString(cursor.getColumnIndex(COLUMN_NOMBRE_USUARIO));
                             String correo = cursor.getString(cursor.getColumnIndex(COLUMN_CORREO_ELECTRONICO));
                             String telefono = cursor.getString(cursor.getColumnIndex(COLUMN_TELEFONO_USUARIO));
+                            int idTipoUsuario = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_TIPO_USUARIO_USUARIO));  // Obtenemos el id_tipo_usuario
 
                             Usuario usuario = new Usuario(nombre, correo, telefono);
+                            usuario.setIdTipoUsuario(idTipoUsuario);  // Asignamos el id_tipo_usuario al usuario
                             usuarios.add(usuario);
                         }
                     } finally {
@@ -1309,11 +1384,14 @@ public class DBHelper extends SQLiteOpenHelper {
 
                     // Agrega logs para depuración
                     for (Usuario usuario : usuarios) {
-                        Log.d("Usuario", "Nombre: " + usuario.getNombreUsuario() + ", Correo: " + usuario.getCorreoElectronico() + ", Teléfono: " + usuario.getTelefonoUsuario());
+                        Log.d("Usuario", "Nombre: " + usuario.getNombreUsuario() + ", Correo: " + usuario.getCorreoElectronico() + ", Teléfono: " + usuario.getTelefonoUsuario() + ", Tipo Usuario: " + usuario.getIdTipoUsuario());
                     }
 
                     return usuarios;
                 }
+
+
+
 
             // Lista de Divisas
                 public List<Divisa> obtenerListaDivisas() {
@@ -1351,45 +1429,113 @@ public class DBHelper extends SQLiteOpenHelper {
                 }
 
            // Lista de productos
-               public List<Producto> obtenerListaProductos() {
-                   List<Producto> productos = new ArrayList<>();
+           public List<Producto> obtenerListaProductos() {
+               List<Producto> productos = new ArrayList<>();
 
-                   SQLiteDatabase database = this.getReadableDatabase();
-                   String[] columns = {
-                           COLUMN_NOMBRE_PRODUCTO,
-                           COLUMN_DESCRIPCION_PRODUCTO,
-                           COLUMN_ID_CATEGORIA_PRODUCTO  // Asegúrate de incluir la columna de la categoría
-                   };
+               SQLiteDatabase database = this.getReadableDatabase();
+               String[] columns = {
+                       COLUMN_ID_PRODUCTO,
+                       COLUMN_NOMBRE_PRODUCTO,
+                       COLUMN_DESCRIPCION_PRODUCTO,
+                       COLUMN_PRECIO_PRODUCTO,
+                       COLUMN_ID_CATEGORIA_PRODUCTO,
+                       COLUMN_AUDIT_FECHA_INSERT_PRODUCTO,
+                       COLUMN_AUDIT_USUARIO_MODIF_PRODUCTO,
+                       COLUMN_AUDIT_FECHA_MODIF_PRODUCTO,
+                       COLUMN_IMAGEN_PRODUCTO,
+                       COLUMN_CANTIDAD_STOCK
+               };
 
-                   Cursor cursor = database.query(TABLE_PRODUCTO, columns, null, null, null, null, null);
+               Cursor cursor = database.query(TABLE_PRODUCTO, columns, null, null, null, null, null);
 
-                   try {
-                       while (cursor.moveToNext()) {
-                           String nombreProducto = cursor.getString(cursor.getColumnIndex(COLUMN_NOMBRE_PRODUCTO));
-                           String descripcionProducto = cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPCION_PRODUCTO));
-                           int idCategoriaProducto = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_CATEGORIA_PRODUCTO));
+               try {
+                   while (cursor.moveToNext()) {
+                       int idProducto = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_PRODUCTO));
+                       String nombreProducto = cursor.getString(cursor.getColumnIndex(COLUMN_NOMBRE_PRODUCTO));
+                       String descripcionProducto = cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPCION_PRODUCTO));
+                       double precioProducto = cursor.getDouble(cursor.getColumnIndex(COLUMN_PRECIO_PRODUCTO));
+                       int idCategoriaProducto = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_CATEGORIA_PRODUCTO));
+                       String auditFechaInsert = cursor.getString(cursor.getColumnIndex(COLUMN_AUDIT_FECHA_INSERT_PRODUCTO));
+                       String auditUsuarioModif = cursor.getString(cursor.getColumnIndex(COLUMN_AUDIT_USUARIO_MODIF_PRODUCTO));
+                       String auditFechaModif = cursor.getString(cursor.getColumnIndex(COLUMN_AUDIT_FECHA_MODIF_PRODUCTO));
+                       String imagenProducto = cursor.getString(cursor.getColumnIndex(COLUMN_IMAGEN_PRODUCTO));
+                       int cantidadStock = cursor.getInt(cursor.getColumnIndex(COLUMN_CANTIDAD_STOCK));
 
-                           // Aquí puedes llamar a otro método en DBHelper para obtener el nombre de la categoría
-                           String nombreCategoria = obtenerNombreCategoriaPorId(idCategoriaProducto);
+                       // Aquí puedes llamar a otro método en DBHelper para obtener el nombre de la categoría
+                       String nombreCategoria = obtenerNombreCategoriaPorId(idCategoriaProducto);
 
-                           // Crear un objeto Producto y agregarlo a la lista
-                           Producto producto = new Producto(nombreProducto, descripcionProducto, idCategoriaProducto);
-                           productos.add(producto);
-                       }
-                   } finally {
-                       cursor.close();
+                       // Crear un objeto Producto y agregarlo a la lista
+                       Producto producto = new Producto(nombreProducto, descripcionProducto, precioProducto, idCategoriaProducto, auditFechaInsert, auditUsuarioModif, auditFechaModif, imagenProducto);
+                       producto.setIdProducto(idProducto);
+                       producto.setCantidadStock(cantidadStock);
+                       productos.add(producto);
                    }
-
-                   // Agrega logs para depuración
-                   for (Producto producto : productos) {
-                       Log.d("Producto", "Nombre: " + producto.getNombreProducto() + ", Descripción: " + producto.getDescripcionProducto() + ", Categoría: " + producto.getIdCategoriaProducto());
-                   }
-
-                   return productos;
+               } finally {
+                   cursor.close();
                }
 
+               // Agrega logs para depuración
+               for (Producto producto : productos) {
+                   Log.d("Producto", "ID: " + producto.getIdProducto() + ", Nombre: " + producto.getNombreProducto() + ", Descripción: " + producto.getDescripcionProducto() + ", Categoría: " + producto.getIdCategoriaProducto() + ", Cantidad en Stock: " + producto.getCantidadStock());
+               }
 
-        // Lista de categorías de productos
+               return productos;
+           }
+
+
+    // LISTA MENU PRODUCTOS
+
+    // Lista de productos agrupados por categoría con campos específicos
+    public List<Producto> obtenerListaMenuProductos() {
+        List<Producto> productos = new ArrayList<>();
+
+        SQLiteDatabase database = this.getReadableDatabase();
+
+        // Definir las columnas que deseas seleccionar
+        String[] columns = {
+                COLUMN_NOMBRE_PRODUCTO,
+                COLUMN_DESCRIPCION_PRODUCTO,
+                COLUMN_PRECIO_PRODUCTO,
+                COLUMN_ID_CATEGORIA_PRODUCTO
+        };
+
+        // Realizar la consulta para obtener los productos agrupados por categoría
+        Cursor cursor = database.query(
+                TABLE_PRODUCTO,
+                columns,
+                null,
+                null,
+                COLUMN_ID_CATEGORIA_PRODUCTO,  // Columna para agrupar
+                null,
+                null,
+                null
+        );
+
+        try {
+            while (cursor.moveToNext()) {
+                String nombreProducto = cursor.getString(cursor.getColumnIndex(COLUMN_NOMBRE_PRODUCTO));
+                String descripcionProducto = cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPCION_PRODUCTO));
+                double precioProducto = cursor.getDouble(cursor.getColumnIndex(COLUMN_PRECIO_PRODUCTO));
+                int idCategoriaProducto = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_CATEGORIA_PRODUCTO));
+
+                // Crear un objeto Producto y agregarlo a la lista
+                Producto producto = new Producto(nombreProducto, descripcionProducto, (int) precioProducto, idCategoriaProducto);
+                productos.add(producto);
+            }
+        } finally {
+            cursor.close();
+        }
+
+        // Agrega logs para depuración
+        for (Producto producto : productos) {
+            Log.d("Producto", "Nombre: " + producto.getNombreProducto() + ", Descripción: " + producto.getDescripcionProducto() + ", Precio: " + producto.getPrecioProducto() + ", Categoría: " + producto.getIdCategoriaProducto());
+        }
+
+        return productos;
+    }
+
+
+    // Lista de categorías de productos
         public List<CategoriaProducto> obtenerListaCategoriasProducto() {
             List<CategoriaProducto> categoriasProducto = new ArrayList<>();
 
@@ -1522,6 +1668,29 @@ public class DBHelper extends SQLiteOpenHelper {
         return tiposUsuario;
     }
 
+    // Obtener una lista de los Tipos de Usuario para un Spinner
+    public List<String> obtenerOpcionesTipoUsuario() {
+        List<String> opcionesTipoUsuario = new ArrayList<>();
+
+        SQLiteDatabase database = this.getReadableDatabase();
+        String[] columns = {COLUMN_NOMBRE_TIPO_USUARIO};
+
+        Cursor cursor = database.query(TABLE_TIPO_USUARIO, columns, null, null, null, null, null);
+
+        try {
+            while (cursor.moveToNext()) {
+                String nombreTipoUsuario = cursor.getString(cursor.getColumnIndex(COLUMN_NOMBRE_TIPO_USUARIO));
+                opcionesTipoUsuario.add(nombreTipoUsuario);
+            }
+        } finally {
+            cursor.close();
+        }
+
+        return opcionesTipoUsuario;
+    }
+
+
+
 
 
     // ELIMINAR
@@ -1603,6 +1772,46 @@ public class DBHelper extends SQLiteOpenHelper {
 
                 return nombreCategoria;
             }
+
+            // Método para obtener el nombre del tipo de usuario por ID
+            public String obtenerNombreTipoUsuarioPorID(int idTipoUsuario) {
+                SQLiteDatabase db = this.getReadableDatabase();
+                String[] projection = {COLUMN_NOMBRE_TIPO_USUARIO}; // Reemplaza con el nombre real de la columna de nombre de tipo de usuario
+
+                Cursor cursor = db.query(TABLE_TIPO_USUARIO, projection, COLUMN_ID_TIPO_USUARIO + " = ?",
+                        new String[]{String.valueOf(idTipoUsuario)}, null, null, null);
+
+                String nombreTipoUsuario = null;
+
+                if (cursor != null && cursor.moveToFirst()) {
+                    nombreTipoUsuario = cursor.getString(cursor.getColumnIndex(COLUMN_NOMBRE_TIPO_USUARIO));
+                    cursor.close();
+                }
+
+                return nombreTipoUsuario;
+            }
+
+        // Método para obtener el Id del tipo de usuario por nombre
+        public int obtenerIdTipoUsuarioPorNombre(String nombreTipoUsuario) {
+            SQLiteDatabase db = this.getReadableDatabase();
+            String[] projection = {COLUMN_ID_TIPO_USUARIO}; // Reemplaza con el nombre real de la columna de ID de tipo de usuario
+            String selection = COLUMN_NOMBRE_TIPO_USUARIO + " = ?";
+            String[] selectionArgs = {nombreTipoUsuario};
+
+            Cursor cursor = db.query(TABLE_TIPO_USUARIO, projection, selection, selectionArgs, null, null, null);
+
+            int idTipoUsuario = 0;  // Valor por defecto
+
+            if (cursor != null && cursor.moveToFirst()) {
+                idTipoUsuario = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_TIPO_USUARIO));
+                cursor.close();
+            }
+
+            return idTipoUsuario;
+        }
+
+
+
 
 
 

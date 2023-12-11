@@ -10,7 +10,6 @@ public class Usuario {
     private String auditFechaInsert;
     private String auditUsuarioModif;
     private String auditFechaModif;
-    private int esAdministrador;
 
     // Constructor con todos los atributos
     public Usuario(int idUsuario, String nombreUsuario, int telefonoUsuario, int idTipoUsuario,
@@ -122,4 +121,5 @@ public class Usuario {
     public void setAuditFechaModif(String auditFechaModif) {
         this.auditFechaModif = auditFechaModif;
     }
+
 }

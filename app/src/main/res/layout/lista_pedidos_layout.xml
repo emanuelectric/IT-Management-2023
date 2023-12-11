@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="43dp"
+        android:layout_height="35dp"
+        app:srcCompat="@drawable/arrows"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"
+        android:clickable="true"
+        android:onClick="lanzarVistaAdministrarContenido" />
+
+    <TextView
+        android:id="@+id/textView_pedidos"
+        android:layout_width="235dp"
+        android:layout_height="45dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="30dp"
+        android:text="Pedidos"
+        android:textSize="25dp" />
+
+    <ListView
+        android:id="@+id/listView_ListaPedidos"
+        android:layout_width="wrap_content"
+        android:layout_height="517dp"
+        android:layout_below="@+id/textView_pedidos"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp" />
+
+    <ImageView
+        android:id="@+id/imageView_agregarPedido"
+        android:layout_width="500dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="620dp"
+        app:srcCompat="@drawable/ic_additem"
+        android:clickable="true"
+        android:onClick="irAgregarPedido"/>
+
+</RelativeLayout>
