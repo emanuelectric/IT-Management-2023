@@ -7,7 +7,7 @@
     android:padding="16dp">
 
     <CheckBox
-        android:id="@+id/checkBoxSeleccionar"
+        android:id="@+id/checkBoxProducto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -60,14 +60,5 @@
         android:layout_marginEnd="16dp"
         android:hint="Cant."
         android:inputType="number" />
-
-    <ImageButton
-        android:id="@+id/imageButtonEliminar"
-        android:layout_width="38dp"
-        android:layout_height="33dp"
-        android:background="@android:color/transparent"
-        android:onClick="eliminarProducto"
-        android:scaleType="fitCenter"
-        android:src="@drawable/ic_delete" />
 
 </LinearLayout>

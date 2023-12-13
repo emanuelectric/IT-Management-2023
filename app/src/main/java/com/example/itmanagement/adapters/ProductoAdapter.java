@@ -81,7 +81,6 @@ public class ProductoAdapter extends ArrayAdapter<Producto> implements ListAdapt
             textViewNombreCategoria = view.findViewById(R.id.textViewNombreCategoriaProducto);
             textViewCantidadStock = view.findViewById(R.id.textViewCantidadStock);
             imageButtonEditar = view.findViewById(R.id.imageButtonEditar);
-            imageButtonEliminar = view.findViewById(R.id.imageButtonEliminar);
         }
     }
 
@@ -92,7 +91,5 @@ public class ProductoAdapter extends ArrayAdapter<Producto> implements ListAdapt
     }
 
     private void eliminarProducto(Producto producto) {
-        // Implementa la lógica para eliminar un producto
-        // Puedes mostrar un diálogo de confirmación antes de realizar la eliminación
     }
 }

@@ -56,8 +56,7 @@
         android:layout_height="48dp"
         android:background="@android:color/transparent"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_edit"
-        android:onClick="irEditarProducto"/>
+        android:src="@drawable/ic_edit"/>
 
     <ImageButton
         android:id="@+id/imageButton2"
@@ -65,7 +64,6 @@
         android:layout_height="48dp"
         android:background="@android:color/transparent"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_delete"
-        android:onClick="eliminarProducto"/>
+        android:src="@drawable/ic_delete"/>
 
 </LinearLayout>

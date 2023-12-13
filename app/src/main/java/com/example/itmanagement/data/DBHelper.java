@@ -1453,7 +1453,7 @@ public class DBHelper extends SQLiteOpenHelper {
                        int idProducto = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_PRODUCTO));
                        String nombreProducto = cursor.getString(cursor.getColumnIndex(COLUMN_NOMBRE_PRODUCTO));
                        String descripcionProducto = cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPCION_PRODUCTO));
-                       double precioProducto = cursor.getDouble(cursor.getColumnIndex(COLUMN_PRECIO_PRODUCTO));
+                       int precioProducto = cursor.getInt(cursor.getColumnIndex(COLUMN_PRECIO_PRODUCTO));
                        int idCategoriaProducto = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_CATEGORIA_PRODUCTO));
                        String auditFechaInsert = cursor.getString(cursor.getColumnIndex(COLUMN_AUDIT_FECHA_INSERT_PRODUCTO));
                        String auditUsuarioModif = cursor.getString(cursor.getColumnIndex(COLUMN_AUDIT_USUARIO_MODIF_PRODUCTO));
@@ -1499,27 +1499,29 @@ public class DBHelper extends SQLiteOpenHelper {
                 COLUMN_ID_CATEGORIA_PRODUCTO
         };
 
-        // Realizar la consulta para obtener los productos agrupados por categoría
+// Realizar la consulta para obtener los productos agrupados por categoría
         Cursor cursor = database.query(
                 TABLE_PRODUCTO,
                 columns,
                 null,
                 null,
-                COLUMN_ID_CATEGORIA_PRODUCTO,  // Columna para agrupar
+                null,
                 null,
                 null,
                 null
         );
 
+
+
         try {
             while (cursor.moveToNext()) {
                 String nombreProducto = cursor.getString(cursor.getColumnIndex(COLUMN_NOMBRE_PRODUCTO));
                 String descripcionProducto = cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPCION_PRODUCTO));
-                double precioProducto = cursor.getDouble(cursor.getColumnIndex(COLUMN_PRECIO_PRODUCTO));
+                int precioProducto = cursor.getInt(cursor.getColumnIndex(COLUMN_PRECIO_PRODUCTO));
                 int idCategoriaProducto = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_CATEGORIA_PRODUCTO));
 
                 // Crear un objeto Producto y agregarlo a la lista
-                Producto producto = new Producto(nombreProducto, descripcionProducto, (int) precioProducto, idCategoriaProducto);
+                Producto producto = new Producto(nombreProducto, descripcionProducto, precioProducto, idCategoriaProducto);
                 productos.add(producto);
             }
         } finally {
@@ -1810,6 +1812,52 @@ public class DBHelper extends SQLiteOpenHelper {
             return idTipoUsuario;
         }
 
+
+
+        // TIPOS DE PEDIDO
+
+    // Método para obtener la lista de nombres de tipos de pedido
+    public List<String> obtenerTiposPedido() {
+        SQLiteDatabase database = this.getReadableDatabase();
+
+        List<String> tiposPedido = new ArrayList<>();
+
+        // Obtén solo los nombres de los tipos de pedido
+        String[] columns = {COLUMN_NOMBRE_TIPO_PEDIDO};
+        Cursor cursor = database.query(TABLE_TIPO_PEDIDO, columns, null, null, null, null, null);
+
+        // Itera a través del cursor y agrega los nombres de tipos de pedido a la lista
+        while (cursor.moveToNext()) {
+            String nombreTipoPedido = cursor.getString(cursor.getColumnIndex(COLUMN_NOMBRE_TIPO_PEDIDO));
+            tiposPedido.add(nombreTipoPedido);
+        }
+
+        cursor.close();
+        // database.close();
+
+        return tiposPedido;
+    }
+
+    // Método para obtener el ID del tipo de pedido por nombre
+    public int obtenerIdTipoPedido(String nombreTipoPedido) {
+        SQLiteDatabase database = this.getReadableDatabase();
+
+        String[] columns = {COLUMN_ID_TIPO_PEDIDO};
+        String selection = COLUMN_NOMBRE_TIPO_PEDIDO + " = ?";
+        String[] selectionArgs = {nombreTipoPedido};
+
+        Cursor cursor = database.query(TABLE_TIPO_PEDIDO, columns, selection, selectionArgs, null, null, null);
+
+        int tipoPedidoID = -1;
+        if (cursor.moveToFirst()) {
+            tipoPedidoID = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_TIPO_PEDIDO));
+        }
+
+        cursor.close();
+        // database.close();
+
+        return tipoPedidoID;
+    }
 
 
 

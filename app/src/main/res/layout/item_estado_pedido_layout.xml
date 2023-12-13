@@ -35,8 +35,7 @@
         android:layout_height="48dp"
         android:background="@android:color/transparent"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_edit"
-        android:onClick="irEditarDivisa"/>
+        android:src="@drawable/ic_edit"/>
 
     <ImageButton
         android:id="@+id/imageButton2"
@@ -44,7 +43,6 @@
         android:layout_height="48dp"
         android:background="@android:color/transparent"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_delete"
-        android:onClick="eliminarDivisa"/>
+        android:src="@drawable/ic_delete"/>
 
 </LinearLayout>

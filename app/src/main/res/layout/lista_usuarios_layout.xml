@@ -35,14 +35,4 @@
         android:layout_marginTop="20dp"
         android:layout_marginRight="10dp" />
 
-    <ImageView
-        android:id="@+id/imageView_agregarUsuario"
-        android:layout_width="500dp"
-        android:layout_height="80dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop= "620dp"
-        app:srcCompat="@drawable/ic_additem"
-        android:clickable="true"
-        android:onClick="LanzarVistaMenuPrincipal"/>
-
 </RelativeLayout>

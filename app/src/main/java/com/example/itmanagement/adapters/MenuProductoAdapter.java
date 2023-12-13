@@ -1,91 +1,104 @@
 package com.example.itmanagement.adapters;
 
 import android.content.Context;
-import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.itmanagement.R;
-import com.example.itmanagement.activities.EditarProductoActivity;
+import com.example.itmanagement.data.DBHelper;
 import com.example.itmanagement.modelo.Producto;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class MenuProductoAdapter extends BaseAdapter {
+public class MenuProductoAdapter extends ArrayAdapter<Producto> {
 
     private final Context context;
     private final List<Producto> menuProductos;
+    private final DBHelper dbHelper;
 
-    public MenuProductoAdapter(Context context, List<Producto> menuProductos) {
+    public MenuProductoAdapter(Context context, List<Producto> menuProductos, DBHelper dbHelper) {
+        super(context, 0, menuProductos);
         this.context = context;
         this.menuProductos = menuProductos;
+        this.dbHelper = dbHelper;
     }
 
-    @Override
-    public int getCount() {
-        return menuProductos.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return menuProductos.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
+    // Método para obtener los productos seleccionados
+    public List<Producto> obtenerProductosSeleccionados() {
+        List<Producto> productosSeleccionados = new ArrayList<>();
+        for (int i = 0; i < getCount(); i++) {
+            Producto producto = getItem(i);
+            if (producto != null && producto.isSeleccionado()) {
+                productosSeleccionados.add(producto);
+            }
+        }
+        return productosSeleccionados;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Producto menuProducto = (Producto) getItem(position);
-
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_menu_producto_layout, parent, false);
         }
 
-        // Configura las vistas con la información del producto
+        Producto menuProducto = menuProductos.get(position);
+
         TextView textViewNombreProducto = convertView.findViewById(R.id.textViewNombreProducto);
         TextView textViewNombreCategoria = convertView.findViewById(R.id.textViewNombreCategoriaProducto);
         TextView textViewPrecioProducto = convertView.findViewById(R.id.textViewPrecioProducto);
+        CheckBox checkBoxProducto = convertView.findViewById(R.id.checkBoxProducto);
+        EditText editTextCantidad = convertView.findViewById(R.id.editTextCantidad);
 
-        // Asigna los valores del producto a las vistas
         textViewNombreProducto.setText(menuProducto.getNombreProducto());
-        // Suponiendo que hay un método getIdCategoriaProducto en el modelo Producto
+
         int idCategoria = menuProducto.getIdCategoriaProducto();
-        // Puedes agregar la lógica para obtener el nombre de la categoría según el ID
-        String nombreCategoria = obtenerNombreCategoriaPorId(idCategoria);
+        String nombreCategoria = dbHelper.obtenerNombreCategoriaPorId(idCategoria);
         textViewNombreCategoria.setText(nombreCategoria);
+
         textViewPrecioProducto.setText("Precio: " + String.valueOf(menuProducto.getPrecioProducto()));
+
+        // Establecer el estado del checkbox
+        checkBoxProducto.setOnCheckedChangeListener(null);
+        checkBoxProducto.setChecked(menuProducto.isSeleccionado());
+
+        // Establecer el valor del EditText
+        editTextCantidad.setText(String.valueOf(menuProducto.getCantidadSeleccionada()));
+
+        // Listener para el cambio de estado del checkbox
+        checkBoxProducto.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            menuProducto.setSeleccionado(isChecked);
+            // Actualizar la vista al cambiar la selección
+            notifyDataSetChanged();
+        });
+
+        // Listener para el cambio de la cantidad
+        editTextCantidad.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                int cantidad = obtenerCantidadSeleccionada(editTextCantidad);
+                menuProducto.setCantidadSeleccionada(cantidad);
+            }
+        });
+
+        // Logs adicionales para rastrear el flujo de ejecución
+        Log.d("AdapterLogs", "getView - Producto: " + menuProducto.getNombreProducto() +
+                ", Cantidad: " + menuProducto.getCantidadSeleccionada() +
+                ", Seleccionado: " + menuProducto.isSeleccionado());
 
         return convertView;
     }
 
-    // Editar
-    public void editarProducto(Producto menuProducto) {
-        // Crea un Intent para iniciar EditarProductoActivity
-        Intent intent = new Intent(context, EditarProductoActivity.class);
-
-        // Puedes pasar información adicional a la actividad, como el ID del producto
-        intent.putExtra("idProducto", menuProducto.getIdProducto());
-
-        // Inicia la actividad
-        context.startActivity(intent);
-    }
-
-    // Eliminar
-    public void eliminarProducto(Producto menuProducto) {
-        // Implementa la lógica para eliminar un producto
-    }
-
-    // Método para obtener el nombre de la categoría por ID (puedes ajustar según tus necesidades)
-    private String obtenerNombreCategoriaPorId(int idCategoria) {
-        // Lógica para obtener el nombre de la categoría según el ID
-        // ...
-
-        return "Nombre de la Categoría";  // Reemplazar con la lógica real
+    private int obtenerCantidadSeleccionada(EditText editTextCantidad) {
+        try {
+            return Integer.parseInt(editTextCantidad.getText().toString());
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 }

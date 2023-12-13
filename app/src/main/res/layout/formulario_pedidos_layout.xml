@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF">
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
 
     <ImageView
         android:id="@+id/imageView"
@@ -33,6 +39,13 @@
         android:layout_marginTop="220dp"
         app:srcCompat="@drawable/bloque_texto" />
 
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="330dp"
+        app:srcCompat="@drawable/bloque_texto" />
+
 
 
     <TextView
@@ -57,7 +70,7 @@
         android:textSize="15dp" />
 
     <Spinner
-        android:id="@+id/spinnerCategoria"
+        android:id="@+id/spinnerTipoPedido"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="55dp"
@@ -65,11 +78,22 @@
         android:layout_marginRight="10dp" />
 
     <EditText
-        android:id="@+id/edittext_comentarioPedido"
+        android:id="@+id/edittext_ubicacionPedido"
         android:layout_width="299dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="55dp"
         android:layout_marginTop="230dp"
+        android:ems="10"
+        android:inputType="text"
+        android:textColor="@color/dark_grey"
+        android:hint="Ubicación del pedido" />
+
+    <EditText
+        android:id="@+id/edittext_comentarioPedido"
+        android:layout_width="299dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="55dp"
+        android:layout_marginTop="340dp"
         android:ems="10"
         android:inputType="text"
         android:textColor="@color/dark_grey"
@@ -82,28 +106,26 @@
         android:id="@+id/textViewMenuProductos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="300dp"
+        android:layout_marginTop="400dp"
         android:gravity="center"
         android:padding="16dp"
         android:text="Menu de productos"
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="396dp"
-        android:layout_height="226dp"
+    <ListView
+        android:id="@+id/listViewMenuProductos"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
         android:layout_below="@id/textViewMenuProductos"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
-        android:paddingTop="8dp" />
+        android:layout_marginLeft="10dp"/>
 
     <Button
         android:id="@+id/boton_siguiente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/recyclerView"
+        android:layout_below="@+id/listViewMenuProductos"
         android:layout_marginTop="20dp"
         android:onClick="guardarTipoUsuario"
         android:textColor="#FFFFFF"
@@ -113,3 +135,5 @@
         android:padding="12dp" />
 
 </RelativeLayout>
+
+    </ScrollView>
